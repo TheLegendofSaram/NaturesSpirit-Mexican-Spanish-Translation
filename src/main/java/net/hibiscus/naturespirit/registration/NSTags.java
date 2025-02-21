@@ -34,7 +34,7 @@ public class NSTags {
     public static final TagKey<Item> OLIVES = createTag("olives");
 
     private static TagKey<Item> createTag(String name) {
-      return TagKey.of(RegistryKeys.ITEM, Identifier.of(NatureSpirit.MOD_ID, name));
+      return TagKey.of(RegistryKeys.ITEM, new Identifier(NatureSpirit.MOD_ID, name));
     }
   }
 
@@ -44,7 +44,7 @@ public class NSTags {
     public static final TagKey<EntityType<?>> IMPERMEABLE_TO_AZOLLA = createTag("impermeable_to_azolla");
 
     private static TagKey<EntityType<?>> createTag(String name) {
-      return TagKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(NatureSpirit.MOD_ID, name));
+      return TagKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(NatureSpirit.MOD_ID, name));
     }
   }
 
@@ -69,7 +69,7 @@ public class NSTags {
     public static final TagKey<Block> SUCCULENT_HORIZONTAL_PLACEMENT_OVERRIDE = createTag("succulent_horizontal_placement_override");
 
     private static TagKey<Block> createTag(String name) {
-      return TagKey.of(RegistryKeys.BLOCK, Identifier.of(NatureSpirit.MOD_ID, name));
+      return TagKey.of(RegistryKeys.BLOCK, new Identifier(NatureSpirit.MOD_ID, name));
     }
   }
 }

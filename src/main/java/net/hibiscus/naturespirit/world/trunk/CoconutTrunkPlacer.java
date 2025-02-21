@@ -32,7 +32,7 @@ import java.util.function.BiConsumer;
 
 public class CoconutTrunkPlacer extends TrunkPlacer {
 
-  public static final MapCodec<CoconutTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<CoconutTrunkPlacer> CODEC = RecordCodecBuilder.create((instance) -> {
     return fillTrunkPlacerFields(instance).and(instance.group(IntProvider.POSITIVE_CODEC.fieldOf("trunk_steps").forGetter((trunkPlacer) -> {
       return trunkPlacer.trunkSteps;
     }), Codec.floatRange(0.0F, 1.0F).fieldOf("fork_probability").forGetter((trunkPlacer) -> {

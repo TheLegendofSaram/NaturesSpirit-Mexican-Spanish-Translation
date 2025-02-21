@@ -19,7 +19,7 @@ public class FlowerSet {
 
   private final String name;
   private final Item dyeColor;
-  private final RegistryEntry<StatusEffect> statusEffect;
+  private final StatusEffect statusEffect;
   private final Item itemBefore;
   private final FlowerPreset preset;
   private Block flowerBlock;
@@ -27,7 +27,7 @@ public class FlowerSet {
   private final List<Block> registeredBlocksList = new ArrayList<>();
   private final List<Item> registeredItemsList = new ArrayList<>();
 
-  public FlowerSet(String name, Item dyeColor, RegistryEntry<StatusEffect> statusEffect, Item itemBefore, FlowerPreset preset) {
+  public FlowerSet(String name, Item dyeColor, StatusEffect statusEffect, Item itemBefore, FlowerPreset preset) {
     this.name = name;
     this.dyeColor = dyeColor;
     this.statusEffect = statusEffect;
@@ -45,7 +45,7 @@ public class FlowerSet {
     this.registerFlower();
   }
 
-  public FlowerSet(String name, RegistryEntry<StatusEffect> statusEffect, Item itemBefore, FlowerPreset preset) {
+  public FlowerSet(String name, StatusEffect statusEffect, Item itemBefore, FlowerPreset preset) {
     this.name = name;
     this.dyeColor = null;
     this.statusEffect = statusEffect;

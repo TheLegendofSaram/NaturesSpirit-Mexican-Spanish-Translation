@@ -33,7 +33,7 @@ import java.util.function.BiConsumer;
 
 public class GhafTrunkPlacer extends TrunkPlacer {
 
-  public static final MapCodec<GhafTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<GhafTrunkPlacer> CODEC = RecordCodecBuilder.create((instance) -> {
     return fillTrunkPlacerFields(instance).and(instance.group(IntProvider.POSITIVE_CODEC.fieldOf("extra_branch_steps").forGetter((trunkPlacer) -> {
       return trunkPlacer.extraBranchSteps;
     }), Codec.floatRange(0.0F, 1.0F).fieldOf("place_branch_per_log_probability").forGetter((trunkPlacer) -> {

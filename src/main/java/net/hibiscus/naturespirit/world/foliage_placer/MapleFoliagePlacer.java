@@ -19,7 +19,7 @@ import net.minecraft.world.gen.foliage.FoliagePlacerType;
 
 public class MapleFoliagePlacer extends FoliagePlacer {
 
-  public static final MapCodec<MapleFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<MapleFoliagePlacer> CODEC = RecordCodecBuilder.create((instance) -> {
     return fillFoliagePlacerFields(instance).and(instance.group(IntProvider.createValidatingCodec(4, 16).fieldOf("height").forGetter((foliagePlacer) -> {
       return foliagePlacer.height;
     }), Codec.floatRange(0.0F, 1.0F).fieldOf("hanging_leaves_chance").forGetter((foliagePlacer) -> {

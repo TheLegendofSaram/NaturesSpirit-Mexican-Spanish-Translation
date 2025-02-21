@@ -1,5 +1,6 @@
 package net.hibiscus.naturespirit.world.foliage_placer;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
@@ -13,7 +14,7 @@ import net.minecraft.world.gen.foliage.FoliagePlacerType;
 
 public class RedwoodFoliagePlacer extends FoliagePlacer {
 
-  public static final MapCodec<RedwoodFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<RedwoodFoliagePlacer> CODEC = RecordCodecBuilder.create((instance) -> {
     return fillFoliagePlacerFields(instance).and(IntProvider.createValidatingCodec(0, 32).fieldOf("trunk_height").forGetter((placer) -> {
       return placer.trunkHeight;
     })).apply(instance, RedwoodFoliagePlacer::new);

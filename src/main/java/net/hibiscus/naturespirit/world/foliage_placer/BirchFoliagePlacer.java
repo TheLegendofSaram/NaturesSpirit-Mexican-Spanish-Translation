@@ -15,7 +15,7 @@ import net.minecraft.world.gen.foliage.FoliagePlacerType;
 
 public class BirchFoliagePlacer extends FoliagePlacer {
 
-  public static final MapCodec<BirchFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<BirchFoliagePlacer> CODEC = RecordCodecBuilder.create((instance) -> {
     return createCodec(instance).apply(instance, BirchFoliagePlacer::new);
   });
   protected final int height;

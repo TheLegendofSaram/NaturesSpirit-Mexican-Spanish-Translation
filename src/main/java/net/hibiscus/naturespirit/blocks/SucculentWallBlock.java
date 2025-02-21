@@ -2,7 +2,6 @@ package net.hibiscus.naturespirit.blocks;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluids;
@@ -25,15 +24,11 @@ import java.util.Map;
 public class SucculentWallBlock
     extends SucculentBlock {
 
-  public static final MapCodec<SucculentWallBlock> CODEC = SucculentWallBlock.createCodec(SucculentWallBlock::new);
   public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
   private static final Map<Direction, VoxelShape> FACING_TO_SHAPE = Maps.newEnumMap(
       ImmutableMap.of(Direction.NORTH, Block.createCuboidShape(0D, 4D, 5D, 16D, 12D, 16D), Direction.SOUTH, Block.createCuboidShape(0D, 4D, 0D, 16D, 12D, 11D), Direction.WEST,
           Block.createCuboidShape(5D, 4D, 0D, 16D, 12D, 16D), Direction.EAST, Block.createCuboidShape(0D, 4D, 0D, 11D, 12D, 16D)));
 
-  public MapCodec<? extends SucculentWallBlock> getCodec() {
-    return CODEC;
-  }
 
   public SucculentWallBlock(AbstractBlock.Settings settings) {
     super(settings);

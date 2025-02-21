@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -18,12 +17,7 @@ import net.minecraft.world.WorldView;
 
 public class SucculentBlock extends CoralParentBlock implements Fertilizable {
 
-  public static final MapCodec<SucculentBlock> CODEC = SucculentBlock.createCodec(SucculentBlock::new);
   private static final VoxelShape SHAPE = Block.createCuboidShape(2D, 0D, 2D, 14D, 4D, 14D);
-
-  public MapCodec<? extends SucculentBlock> getCodec() {
-    return CODEC;
-  }
 
   public SucculentBlock(AbstractBlock.Settings settings) {
     super(settings);
@@ -51,7 +45,7 @@ public class SucculentBlock extends CoralParentBlock implements Fertilizable {
   }
 
   @Override
-  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean bl) {
     return true;
   }
 

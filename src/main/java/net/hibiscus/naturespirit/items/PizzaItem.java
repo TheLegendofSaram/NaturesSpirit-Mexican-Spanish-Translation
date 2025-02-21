@@ -1,14 +1,9 @@
 package net.hibiscus.naturespirit.items;
 
 import net.hibiscus.naturespirit.NatureSpirit;
-import net.hibiscus.naturespirit.blocks.PizzaBlock;
-import net.hibiscus.naturespirit.blocks.block_entities.PizzaToppingVariant;
-import net.hibiscus.naturespirit.registration.NSDataComponents;
 import net.hibiscus.naturespirit.registration.NSMiscBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BlockStateComponent;
-import net.minecraft.component.type.NbtComponent;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,71 +11,88 @@ import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class PizzaItem extends AliasedBlockItem {
-
   public PizzaItem(Block block, Settings settings) {
     super(block, settings);
   }
 
+
   public void addBitesToPizza(ItemStack pizza) {
-    BlockStateComponent blockStateComponent = pizza.getOrDefault(DataComponentTypes.BLOCK_STATE, BlockStateComponent.DEFAULT);
-    NbtComponent blockEntityComponent = pizza.get(DataComponentTypes.BLOCK_ENTITY_DATA);
+    NbtCompound nbtCompound = pizza.getOrCreateSubNbt("BlockEntityTag");
+    NbtCompound nbtCompound2 = pizza.getOrCreateSubNbt("BlockStateTag");
+    assert nbtCompound != null;
     int pizzaSlice = this.asItem() == NSMiscBlocks.WHOLE_PIZZA ? 0 : this.asItem() == NSMiscBlocks.THREE_QUARTERS_PIZZA ? 1 : this.asItem() == NSMiscBlocks.HALF_PIZZA ? 2 : 3;
-    pizza.set(DataComponentTypes.BLOCK_STATE, blockStateComponent.with(PizzaBlock.BITES, pizzaSlice));
-    if (blockEntityComponent == null) {
-      NbtCompound nbtCompound = new NbtCompound();
-      nbtCompound.putString("id", "natures_spirit:pizza_block_entity");
-      pizza.set(DataComponentTypes.BLOCK_ENTITY_DATA, NbtComponent.of(nbtCompound));
+    nbtCompound.putInt("pizza_bites", pizzaSlice);
+    nbtCompound2.putInt("pizza_bites", pizzaSlice);
+  }
+
+  public void getAllToppings(ItemStack pizza) {
+    NbtCompound nbtCompound = pizza.getOrCreateSubNbt("BlockEntityTag");
+    assert nbtCompound != null;
+    NbtList nbtList = ((NbtList)nbtCompound.get("topping_types"));
+    if(nbtList != null) {
+      int j = nbtList.size();
+      nbtCompound.putInt("toppings_number", j);
     }
   }
 
-  @Override
-  public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+  @Override public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
     addBitesToPizza(stack);
+    getAllToppings(stack);
   }
 
-  @Override
-  public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-    super.appendTooltip(stack, context, tooltip, type);
-    List<PizzaToppingVariant> list = stack.get(NSDataComponents.TOPPINGS);
-    if (list != null) {
-      for (PizzaToppingVariant pizzaToppingVariant : list) {
-        tooltip.add(Text.translatable("block.natures_spirit.pizza." + pizzaToppingVariant.translationKey().replace(":", ".")).formatted(Formatting.GRAY));
+  public void appendTooltip(ItemStack stack, @Nullable World world, List <Text> tooltip, TooltipContext context) {
+    super.appendTooltip(stack, world, tooltip, context);
+
+
+    NbtCompound nbtCompound = stack.getOrCreateSubNbt("BlockEntityTag");
+    assert nbtCompound != null;
+    NbtList nbtList = ((NbtList)nbtCompound.get("topping_types"));
+    if (nbtList != null) {
+      int j = nbtList.size();
+
+      for(int i = 0; i < j; ++i) {
+        tooltip.add(Text.translatable("block.natures_spirit.pizza." + nbtList.getString(i).replace(":", ".")).formatted(Formatting.GRAY));
       }
     }
   }
 
-  @Override
   public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
     ItemStack itemStack = super.finishUsing(stack, world, user);
-    Item pizzaSlice = this.asItem() == NSMiscBlocks.WHOLE_PIZZA ? NSMiscBlocks.THREE_QUARTERS_PIZZA
-        : this.asItem() == NSMiscBlocks.THREE_QUARTERS_PIZZA ? NSMiscBlocks.HALF_PIZZA : this.asItem() == NSMiscBlocks.HALF_PIZZA ? NSMiscBlocks.QUARTER_PIZZA : Items.AIR;
+    Item pizzaSlice = this.asItem() == NSMiscBlocks.WHOLE_PIZZA ? NSMiscBlocks.THREE_QUARTERS_PIZZA : this.asItem() == NSMiscBlocks.THREE_QUARTERS_PIZZA ? NSMiscBlocks.HALF_PIZZA : this.asItem() == NSMiscBlocks.HALF_PIZZA ? NSMiscBlocks.QUARTER_PIZZA : Items.AIR;
 
     PlayerEntity holder = (PlayerEntity) user;
     holder.incrementStat(NatureSpirit.EAT_PIZZA_SLICE);
-    List<PizzaToppingVariant> list = stack.get(NSDataComponents.TOPPINGS);
-    if (list != null) {
-      int foodAmount = 2;
-      float saturationModifier = 0.2F;
-      for (PizzaToppingVariant pizzaToppingVariant : list) {
-        foodAmount += pizzaToppingVariant.hunger();
-        saturationModifier += pizzaToppingVariant.saturation();
+    int foodAmount = 2;
+    float saturationModifier = 0.2F;
+    NbtCompound nbtCompound = stack.getOrCreateSubNbt("BlockEntityTag");
+    assert nbtCompound != null;
+    NbtList nbtList = ((NbtList)nbtCompound.get("topping_types"));
+    if (nbtList != null) {
+      int j = nbtList.size();
+      for(int i = 0; i < j; i++) {
+        foodAmount++;
+        saturationModifier = saturationModifier + 0.1F;
       }
-      holder.getHungerManager().add(foodAmount, saturationModifier);
     }
-    if (((PlayerEntity) user).getAbilities().creativeMode) {
+    holder.getHungerManager().add(foodAmount, saturationModifier);
+
+    if(((PlayerEntity) user).getAbilities().creativeMode) {
       return itemStack;
-    } else {
+    }
+    else {
+      assert itemStack.getNbt() != null;
       ItemStack itemStack1 = new ItemStack(pizzaSlice, 1);
-      itemStack1.copyComponentsToNewStack(stack.getItem(), 1);
+      itemStack1.setNbt(stack.getNbt());
       return itemStack1;
     }
   }

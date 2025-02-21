@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSMiscBlocks;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -41,11 +40,6 @@ public class WaterFlowerbedBlock extends PlantBlock implements Fertilizable {
   }
 
   @Override
-  protected MapCodec<? extends PlantBlock> getCodec() {
-    return null;
-  }
-
-  @Override
   public BlockState rotate(BlockState state, BlockRotation rotation) {
     return state.with(FACING, rotation.rotate(state.get(FACING)));
   }
@@ -66,8 +60,7 @@ public class WaterFlowerbedBlock extends PlantBlock implements Fertilizable {
   }
 
   @Override
-  public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-    Hand hand = player.getActiveHand();
+  public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
     boolean bl = player.getStackInHand(hand).isOf(NSMiscBlocks.HELVOLA_FLOWER_ITEM) && state.get(FLOWER_AMOUNT) < 4;
     if (bl) {
       world.setBlockState(pos, state.with(FLOWER_AMOUNT, Math.min(4, state.get(FLOWER_AMOUNT) + 1)));
@@ -75,7 +68,7 @@ public class WaterFlowerbedBlock extends PlantBlock implements Fertilizable {
         player.getStackInHand(hand).decrement(1);
       }
     }
-    return bl ? ActionResult.SUCCESS : super.onUse(state, world, pos, player, hit);
+    return bl ? ActionResult.SUCCESS : super.onUse(state, world, pos, player, hand, hit);
   }
 
   @Override
@@ -104,7 +97,7 @@ public class WaterFlowerbedBlock extends PlantBlock implements Fertilizable {
   }
 
   @Override
-  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean bl) {
     return true;
   }
 

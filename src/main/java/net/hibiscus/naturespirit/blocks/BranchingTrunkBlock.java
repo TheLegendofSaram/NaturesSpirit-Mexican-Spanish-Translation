@@ -1,7 +1,6 @@
 package net.hibiscus.naturespirit.blocks;
 
 
-import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
@@ -123,8 +122,7 @@ public class BranchingTrunkBlock extends ConnectingBlock implements Waterloggabl
     builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN, WATERLOGGED, SHEARED);
   }
 
-  @Override
-  protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+  public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
     return false;
   }
 
@@ -133,8 +131,4 @@ public class BranchingTrunkBlock extends ConnectingBlock implements Waterloggabl
     return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
   }
 
-  @Override
-  protected MapCodec<? extends ConnectingBlock> getCodec() {
-    return null;
-  }
 }

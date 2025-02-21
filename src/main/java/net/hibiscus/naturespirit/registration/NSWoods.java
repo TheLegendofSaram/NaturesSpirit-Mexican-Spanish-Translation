@@ -10,9 +10,10 @@ import net.hibiscus.naturespirit.datagen.NSConfiguredFeatures;
 import net.hibiscus.naturespirit.items.CoconutHalfItem;
 import net.hibiscus.naturespirit.registration.sets.WoodSet;
 import net.hibiscus.naturespirit.registration.sets.WoodSet.WoodPreset;
+import net.hibiscus.naturespirit.world.tree.*;
 import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.component.type.FoodComponent;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.Items;
@@ -28,7 +29,7 @@ import static net.hibiscus.naturespirit.registration.NSRegistryHelper.*;
 public class NSWoods {
 
   public static final WoodSet REDWOOD = new WoodSet(
-      Identifier.of(MOD_ID, "redwood"),
+      new Identifier(MOD_ID, "redwood"),
       MapColor.TERRACOTTA_BROWN,
       MapColor.RED,
       Blocks.CHERRY_LEAVES,
@@ -40,12 +41,11 @@ public class NSWoods {
       () -> NSBoatTypes.REDWOOD,
       WoodSet.WoodPreset.FROSTABLE,
       false,
-      Optional.of(NSConfiguredFeatures.REDWOOD_TREE),
-      Optional.of(NSConfiguredFeatures.LARGE_REDWOOD_TREE)
+      new RedwoodSaplingGenerator()
   );
 
   public static final WoodSet SUGI = new WoodSet(
-      Identifier.of(MOD_ID, "sugi"),
+      new Identifier(MOD_ID, "sugi"),
       MapColor.DEEPSLATE_GRAY,
       MapColor.DIRT_BROWN,
       REDWOOD.getLeaves(),
@@ -57,12 +57,11 @@ public class NSWoods {
       () -> NSBoatTypes.SUGI,
       WoodSet.WoodPreset.FANCY,
       true,
-      Optional.of(NSConfiguredFeatures.SUGI_TREE),
-      Optional.empty()
+      new SugiSaplingGenerator()
   );
 
   public static final WoodSet WISTERIA = new WoodSet(
-      Identifier.of(MOD_ID, "wisteria"),
+      new Identifier(MOD_ID, "wisteria"),
       MapColor.GRAY,
       MapColor.TERRACOTTA_WHITE,
       SUGI.getLeaves(),
@@ -74,11 +73,11 @@ public class NSWoods {
       () -> NSBoatTypes.WISTERIA,
       WoodSet.WoodPreset.WISTERIA,
       true,
-      NSConfiguredFeatures.WHITE_WISTERIA_TREE
+      new WhiteWisteriaSaplingGenerator()
   );
 
   public static final WoodSet FIR = new WoodSet(
-      Identifier.of(MOD_ID, "fir"),
+      new Identifier(MOD_ID, "fir"),
       MapColor.GRAY,
       MapColor.DIRT_BROWN,
       WISTERIA.getPurpleLeaves(),
@@ -90,11 +89,11 @@ public class NSWoods {
       () -> NSBoatTypes.FIR,
       WoodSet.WoodPreset.FROSTABLE,
       false,
-      NSConfiguredFeatures.FIR_TREE
+      new FirSaplingGenerator()
   );
 
   public static final WoodSet WILLOW = new WoodSet(
-      Identifier.of(MOD_ID, "willow"),
+      new Identifier(MOD_ID, "willow"),
       MapColor.TERRACOTTA_BLACK,
       MapColor.TERRACOTTA_BROWN,
       FIR.getLeaves(),
@@ -106,11 +105,11 @@ public class NSWoods {
       () -> NSBoatTypes.WILLOW,
       WoodSet.WoodPreset.WILLOW,
       false,
-      NSConfiguredFeatures.WILLOW_TREE
+      new WillowSaplingGenerator()
   );
 
   public static final WoodSet ASPEN = new WoodSet(
-      Identifier.of(MOD_ID, "aspen"),
+      new Identifier(MOD_ID, "aspen"),
       MapColor.WHITE_GRAY,
       MapColor.PALE_YELLOW,
       WILLOW.getLeaves(),
@@ -122,10 +121,10 @@ public class NSWoods {
       () -> NSBoatTypes.ASPEN,
       WoodSet.WoodPreset.ASPEN,
       false,
-      NSConfiguredFeatures.ASPEN_TREE
+      new AspenSaplingGenerator()
   );
   public static final WoodSet MAPLE = new WoodSet(
-      Identifier.of(MOD_ID, "maple"),
+      new Identifier(MOD_ID, "maple"),
       MapColor.SPRUCE_BROWN,
       MapColor.ORANGE,
       ASPEN.getLeaves(),
@@ -137,11 +136,11 @@ public class NSWoods {
       () -> NSBoatTypes.MAPLE,
       WoodSet.WoodPreset.MAPLE,
       false,
-      NSConfiguredFeatures.RED_MAPLE_TREE
+      new RedMapleSaplingGenerator()
   );
 
   public static final WoodSet CYPRESS = new WoodSet(
-      Identifier.of(MOD_ID, "cypress"),
+      new Identifier(MOD_ID, "cypress"),
       MapColor.SPRUCE_BROWN,
       MapColor.OAK_TAN,
       MAPLE.getYellowLeaves(),
@@ -153,11 +152,11 @@ public class NSWoods {
       () -> NSBoatTypes.CYPRESS,
       WoodSet.WoodPreset.DEFAULT,
       false,
-      NSConfiguredFeatures.CYPRESS_TREE
+      new CypressSaplingGenerator()
   );
 
   public static final WoodSet OLIVE = new WoodSet(
-      Identifier.of(MOD_ID, "olive"),
+      new Identifier(MOD_ID, "olive"),
       MapColor.PALE_YELLOW,
       MapColor.PALE_GREEN,
       CYPRESS.getLeaves(),
@@ -169,14 +168,13 @@ public class NSWoods {
       () -> NSBoatTypes.OLIVE,
       WoodSet.WoodPreset.DEFAULT,
       false,
-      Optional.empty(),
-      Optional.of(NSConfiguredFeatures.OLIVE_TREE)
+      new OliveSaplingGenerator()
   );
 
   public static final Block OLIVE_BRANCH = registerPlantBlock("olive_branch", new OliveBranchBlock(AbstractBlock.Settings.create().breakInstantly().noCollision().ticksRandomly().sounds(BlockSoundGroup.GRASS).nonOpaque().pistonBehavior(PistonBehavior.DESTROY)), OLIVE.getLog(), 0.5F);
 
   public static final WoodSet JOSHUA = new WoodSet(
-      Identifier.of(MOD_ID, "joshua"),
+      new Identifier(MOD_ID, "joshua"),
       MapColor.PALE_GREEN,
       MapColor.DEEPSLATE_GRAY,
       OLIVE.getLeaves(),
@@ -188,11 +186,11 @@ public class NSWoods {
       () -> NSBoatTypes.JOSHUA,
       WoodSet.WoodPreset.JOSHUA,
       true,
-      NSConfiguredFeatures.JOSHUA_TREE
+      new JoshuaSaplingGenerator()
   );
 
   public static final WoodSet GHAF = new WoodSet(
-      Identifier.of(MOD_ID, "ghaf"),
+      new Identifier(MOD_ID, "ghaf"),
       MapColor.LIGHT_GRAY,
       MapColor.BROWN,
       JOSHUA.getLeaves(),
@@ -204,7 +202,7 @@ public class NSWoods {
       () -> NSBoatTypes.GHAF,
       WoodSet.WoodPreset.SANDY,
       false,
-      NSConfiguredFeatures.GHAF_TREE
+      new GhafSaplingGenerator()
   );
 
   public static final Block XERIC_THATCH = registerBlock("xeric_thatch",
@@ -220,7 +218,7 @@ public class NSWoods {
   );
 
   public static final WoodSet PALO_VERDE = new WoodSet(
-      Identifier.of(MOD_ID, "palo_verde"),
+      new Identifier(MOD_ID, "palo_verde"),
       MapColor.YELLOW,
       MapColor.LICHEN_GREEN,
       GHAF.getLeaves(),
@@ -232,11 +230,11 @@ public class NSWoods {
       () -> NSBoatTypes.PALO_VERDE,
       WoodSet.WoodPreset.SANDY,
       false,
-      NSConfiguredFeatures.PALO_VERDE_TREE
+      new PaloVerdeSaplingGenerator()
   );
 
   public static final WoodSet COCONUT = new WoodSet(
-      Identifier.of(MOD_ID, "coconut"),
+      new Identifier(MOD_ID, "coconut"),
       MapColor.DULL_PINK,
       MapColor.BROWN,
       PALO_VERDE.getLeaves(),
@@ -248,7 +246,7 @@ public class NSWoods {
       () -> NSBoatTypes.COCONUT,
       WoodSet.WoodPreset.NO_SAPLING,
       true,
-      NSConfiguredFeatures.COCONUT_TREE
+      new CoconutSaplingGenerator()
   );
 
   public static final Block COCONUT_THATCH = registerBlock("coconut_thatch",
@@ -265,11 +263,10 @@ public class NSWoods {
   public static final Block COCONUT_BLOCK = registerPlantBlock("coconut", new CoconutBlock(
       AbstractBlock.Settings.create().strength(1.0F).sounds(BlockSoundGroup.GRASS).nonOpaque().pistonBehavior(PistonBehavior.DESTROY)
   ), Items.SWEET_BERRIES, 0.2F);
-  public static final Block COCONUT_SPROUT = registerPlantBlock("coconut_sprout", new SproutingCoconutBlock(
-      new SaplingGenerator(NatureSpirit.MOD_ID + "_coconut", Optional.empty(), Optional.of(NSConfiguredFeatures.COCONUT_TREE), Optional.empty()),
+  public static final Block COCONUT_SPROUT = registerPlantBlock("coconut_sprout", new SproutingCoconutBlock(new CoconutSaplingGenerator(),
       AbstractBlock.Settings.create().strength(1.0F).sounds(BlockSoundGroup.GRASS).nonOpaque().pistonBehavior(PistonBehavior.DESTROY)
   ), PALO_VERDE.getSapling(), 0.2F);
-  public static final FoodComponent COCONUT_COMPONENT = (new FoodComponent.Builder()).nutrition(6).saturationModifier(0.6F).build();
+  public static final FoodComponent COCONUT_COMPONENT = (new FoodComponent.Builder()).hunger(6).saturationModifier(0.6F).build();
 
   public static final Item COCONUT_SHELL = registerPlantItem("coconut_shell",
       new Item(new Item.Settings()),
@@ -287,7 +284,7 @@ public class NSWoods {
   );
 
   public static final WoodSet CEDAR = new WoodSet(
-      Identifier.of(MOD_ID, "cedar"),
+      new Identifier(MOD_ID, "cedar"),
       MapColor.TERRACOTTA_MAGENTA,
       MapColor.GRAY,
       COCONUT.getLeaves(),
@@ -299,11 +296,11 @@ public class NSWoods {
       () -> NSBoatTypes.CEDAR,
       WoodSet.WoodPreset.DEFAULT,
       false,
-      NSConfiguredFeatures.CEDAR_TREE
+      new CedarSaplingGenerator()
   );
 
   public static final WoodSet LARCH = new WoodSet(
-      Identifier.of(MOD_ID, "larch"),
+      new Identifier(MOD_ID, "larch"),
       MapColor.BLUE,
       MapColor.LIGHT_GRAY,
       CEDAR.getLeaves(),
@@ -315,7 +312,7 @@ public class NSWoods {
       () -> NSBoatTypes.LARCH,
       WoodPreset.DEFAULT,
       false,
-      NSConfiguredFeatures.LARCH_TREE
+      new LarchSaplingGenerator()
   );
 
   public static final Block EVERGREEN_THATCH = registerBlock("evergreen_thatch",
@@ -331,7 +328,7 @@ public class NSWoods {
   );
 
   public static final WoodSet MAHOGANY = new WoodSet(
-      Identifier.of(MOD_ID, "mahogany"),
+      new Identifier(MOD_ID, "mahogany"),
       MapColor.BROWN,
       MapColor.LIGHT_GRAY,
       LARCH.getLeaves(),
@@ -342,12 +339,11 @@ public class NSWoods {
       LARCH.getSapling(),
       () -> NSBoatTypes.MAHOGANY, WoodSet.WoodPreset.DEFAULT,
       true,
-      Optional.empty(),
-      Optional.of(NSConfiguredFeatures.MAHOGANY_TREE)
+      new MahoganySaplingGenerator()
   );
 
   public static final WoodSet SAXAUL = new WoodSet(
-      Identifier.of(MOD_ID, "saxaul"),
+      new Identifier(MOD_ID, "saxaul"),
       MapColor.LIGHT_GRAY,
       MapColor.LIGHT_GRAY,
       MAHOGANY.getLeaves(),
@@ -359,11 +355,11 @@ public class NSWoods {
       () -> NSBoatTypes.SAXAUL,
       WoodSet.WoodPreset.SANDY,
       false,
-      NSConfiguredFeatures.SAXAUL_TREE
+      new SaxaulSaplingGenerator()
   );
 
 //   public static final WoodSet BANYAN = new WoodSet(
-//           Identifier.of(MOD_ID, "banyan"),
+//           new Identifier(MOD_ID, "banyan"),
 //           MapColor.BROWN,
 //           MapColor.LIGHT_GRAY,
 //           LARCH.getLeaves(),

@@ -44,7 +44,7 @@ public class BrushItemMixin {
           if (blockState.isOf(NSMiscBlocks.LARGE_CALCITE_BUD)) world.setBlockState(blockPos, NSMiscBlocks.SMALL_CALCITE_BUD.getStateWithProperties(blockState));
           if (blockState.isOf(NSMiscBlocks.CALCITE_CLUSTER)) world.setBlockState(blockPos, NSMiscBlocks.LARGE_CALCITE_BUD.getStateWithProperties(blockState));
           EquipmentSlot equipmentSlot = stack.equals(playerEntity.getEquippedStack(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
-          stack.damage(1, user, equipmentSlot);
+          stack.damage(1, user, (livingEntity -> livingEntity.sendEquipmentBreakStatus(equipmentSlot)));
         }
       }
     }

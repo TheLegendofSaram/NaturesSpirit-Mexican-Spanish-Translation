@@ -1,6 +1,7 @@
 package net.hibiscus.naturespirit.world.tree_decorator;
 
 import com.google.common.collect.Lists;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSMiscBlocks;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class MapleGroundTreeDecorator extends TreeDecorator {
 
-  public static final MapCodec<MapleGroundTreeDecorator> CODEC;
+  public static final Codec<MapleGroundTreeDecorator> CODEC;
   private final BlockStateProvider provider;
   private final BlockStateProvider provider2;
 
@@ -91,7 +92,7 @@ public class MapleGroundTreeDecorator extends TreeDecorator {
   }
 
   static {
-    CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
+    CODEC = RecordCodecBuilder.create((instance) -> instance.group(
         BlockStateProvider.TYPE_CODEC.fieldOf("inner_block").forGetter((treeDecorator) -> treeDecorator.provider),
         BlockStateProvider.TYPE_CODEC.fieldOf("outer_block").forGetter((treeDecorator) -> treeDecorator.provider2)
     ).apply(instance, MapleGroundTreeDecorator::new));

@@ -29,7 +29,7 @@ public class NSItemGroups {
   }
 
   private static RegistryKey<ItemGroup> register(String id) {
-    return RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(MOD_ID, id));
+    return RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(MOD_ID, id));
   }
 
   private static void build(RegistryKey<ItemGroup> key, ItemGroup itemGroup) {

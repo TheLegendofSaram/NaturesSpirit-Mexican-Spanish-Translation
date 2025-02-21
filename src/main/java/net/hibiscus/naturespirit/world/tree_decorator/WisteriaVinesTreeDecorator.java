@@ -12,7 +12,7 @@ import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 
 public class WisteriaVinesTreeDecorator extends TreeDecorator {
 
-  public static final MapCodec<WisteriaVinesTreeDecorator> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<WisteriaVinesTreeDecorator> CODEC = RecordCodecBuilder.create((instance) -> {
     return instance.group(Codec.floatRange(0.0F, 1.0F).fieldOf("probability").forGetter((treeDecorator) -> treeDecorator.probability),
         BlockStateProvider.TYPE_CODEC.fieldOf("block_provider").forGetter((treeDecorator) -> treeDecorator.blockProvider),
         BlockStateProvider.TYPE_CODEC.fieldOf("block_provider2").forGetter((treeDecorator) -> treeDecorator.blockProvider2),

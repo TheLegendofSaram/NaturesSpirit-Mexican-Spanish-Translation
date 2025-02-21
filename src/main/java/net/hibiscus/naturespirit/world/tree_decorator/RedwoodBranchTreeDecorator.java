@@ -15,7 +15,7 @@ import java.util.List;
 
 public class RedwoodBranchTreeDecorator extends TreeDecorator {
 
-  public static final MapCodec<RedwoodBranchTreeDecorator> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<RedwoodBranchTreeDecorator> CODEC = RecordCodecBuilder.create((instance) -> {
     return instance.group(
         Codec.floatRange(0.0F, 1.0F).fieldOf("probability").forGetter((treeDecorator) -> treeDecorator.probability),
         BlockStateProvider.TYPE_CODEC.fieldOf("leaf_provider").forGetter((treeDecorator) -> treeDecorator.leaf_provider)

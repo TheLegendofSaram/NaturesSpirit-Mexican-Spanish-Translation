@@ -1,5 +1,6 @@
 package net.hibiscus.naturespirit.world.tree_decorator;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.block.Blocks;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class SnowTreeDecorator extends TreeDecorator {
 
-  public static final MapCodec<SnowTreeDecorator> CODEC = MapCodec.unit(SnowTreeDecorator::new);
+  public static final Codec<SnowTreeDecorator> CODEC = Codec.unit(SnowTreeDecorator::new);
 
   public SnowTreeDecorator() {
   }

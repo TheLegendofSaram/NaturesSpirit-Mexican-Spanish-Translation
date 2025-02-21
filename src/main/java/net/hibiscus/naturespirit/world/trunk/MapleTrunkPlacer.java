@@ -12,6 +12,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PillarBlock;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.Mutable;
 import net.minecraft.util.math.Direction;
@@ -33,7 +34,7 @@ import java.util.function.Function;
 public class MapleTrunkPlacer extends TrunkPlacer {
 
   private static final Codec<UniformIntProvider> BRANCH_START_OFFSET_FROM_TOP_CODEC;
-  public static final MapCodec<MapleTrunkPlacer> CODEC;
+  public static final Codec<MapleTrunkPlacer> CODEC;
   private final IntProvider branchCount;
   private final IntProvider branchHorizontalLength;
   private final UniformIntProvider branchStartOffsetFromTop;
@@ -137,12 +138,12 @@ public class MapleTrunkPlacer extends TrunkPlacer {
   }
 
   static {
-    BRANCH_START_OFFSET_FROM_TOP_CODEC = UniformIntProvider.CODEC.codec().validate((branchStartOffsetFromTop) -> {
+    BRANCH_START_OFFSET_FROM_TOP_CODEC = Codecs.validate(UniformIntProvider.CODEC, (branchStartOffsetFromTop) -> {
       return branchStartOffsetFromTop.getMax() - branchStartOffsetFromTop.getMin() < 1 ? DataResult.error(() -> {
         return "Need at least 2 blocks variation for the branch starts to fit both branches";
       }) : DataResult.success(branchStartOffsetFromTop);
     });
-    CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+    CODEC = RecordCodecBuilder.create((instance) -> {
       return fillTrunkPlacerFields(instance).and(instance.group(IntProvider.createValidatingCodec(1, 5).fieldOf("branch_count").forGetter((trunkPlacer) -> {
         return trunkPlacer.branchCount;
       }), IntProvider.createValidatingCodec(1, 16).fieldOf("branch_horizontal_length").forGetter((trunkPlacer) -> {

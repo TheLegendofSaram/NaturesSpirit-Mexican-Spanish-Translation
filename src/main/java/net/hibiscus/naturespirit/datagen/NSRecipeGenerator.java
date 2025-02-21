@@ -22,6 +22,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 import static net.hibiscus.naturespirit.NatureSpirit.MOD_ID;
 import static net.hibiscus.naturespirit.registration.NSMiscBlocks.*;
@@ -29,8 +30,8 @@ import static net.minecraft.data.family.BlockFamilies.register;
 
 public class NSRecipeGenerator extends FabricRecipeProvider {
 
-  public NSRecipeGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-    super(output, registryLookup);
+  public NSRecipeGenerator(FabricDataOutput output) {
+    super(output);
   }
 
   public static final BlockFamily PINK_SANDSTONE_FAMILY = register(NSMiscBlocks.PINK_SANDSTONE).wall(PINK_SANDSTONE_WALL).stairs(PINK_SANDSTONE_STAIRS).slab(PINK_SANDSTONE_SLAB)
@@ -40,23 +41,23 @@ public class NSRecipeGenerator extends FabricRecipeProvider {
       .noGenerateModels().build();
 
 
-  public static void offerShapelessRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible input, String group, int outputCount) {
+  public static void offerShapelessRecipe(Consumer<RecipeJsonProvider> exporter, ItemConvertible output, ItemConvertible input, String group, int outputCount) {
     ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, output, outputCount).input(input).group(group)
         .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-        .offerTo(exporter, Identifier.of(MOD_ID, RecipeProvider.convertBetween(output, input)));
+        .offerTo(exporter, new Identifier(MOD_ID, RecipeProvider.convertBetween(output, input)));
   }
 
-  public static void offerStonecuttingRecipe(RecipeExporter exporter, RecipeCategory category, ItemConvertible output, ItemConvertible input) {
+  public static void offerStonecuttingRecipe(Consumer<RecipeJsonProvider> exporter, RecipeCategory category, ItemConvertible output, ItemConvertible input) {
     offerStonecuttingRecipe(exporter, category, output, input, 1);
   }
 
-  public static void offerStonecuttingRecipe(RecipeExporter exporter, RecipeCategory category, ItemConvertible output, ItemConvertible input, int count) {
-    StonecuttingRecipeJsonBuilder.createStonecutting(Ingredient.ofItems(input), category, output, count)
+  public static void offerStonecuttingRecipe(Consumer<RecipeJsonProvider> exporter, RecipeCategory category, ItemConvertible output, ItemConvertible input, int count) {
+    SingleItemRecipeJsonBuilder.createStonecutting(Ingredient.ofItems(input), category, output, count)
         .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-        .offerTo(exporter, Identifier.of(MOD_ID, RecipeProvider.convertBetween(output, input) + "_stonecutting"));
+        .offerTo(exporter, new Identifier(MOD_ID, RecipeProvider.convertBetween(output, input) + "_stonecutting"));
   }
 
-  private void generateWoodRecipes(HashMap<String, WoodSet> woods, RecipeExporter consumer) {
+  private void generateWoodRecipes(HashMap<String, WoodSet> woods, Consumer<RecipeJsonProvider> consumer) {
     for (WoodSet woodSet : woods.values()) {
       offerPlanksRecipe(consumer, woodSet.getPlanks(), woodSet.getItemLogsTag(), 4);
       if (woodSet.hasBark()) {
@@ -75,7 +76,7 @@ public class NSRecipeGenerator extends FabricRecipeProvider {
             .stairs(woodSet.getMosaicStairs())
             .slab(woodSet.getMosaicSlab())
             .build();
-        generateFamily(consumer, mosaicFamily, FeatureSet.of(FeatureFlags.VANILLA));
+        generateFamily(consumer, mosaicFamily);
       }
       offerHangingSignRecipe(consumer, woodSet.getHangingSign(), woodSet.getStrippedLog());
       offerBoatRecipe(consumer, woodSet.getBoatItem(), woodSet.getPlanks());
@@ -93,11 +94,11 @@ public class NSRecipeGenerator extends FabricRecipeProvider {
           .group("wooden")
           .unlockCriterionName("has_planks")
           .build();
-      generateFamily(consumer, family, FeatureSet.of(FeatureFlags.VANILLA));
+      generateFamily(consumer, family);
     }
   }
 
-  private void generateFlowerRecipes(HashMap<String, FlowerSet> flowers, RecipeExporter consumer) {
+  private void generateFlowerRecipes(HashMap<String, FlowerSet> flowers, Consumer<RecipeJsonProvider> consumer) {
     for (FlowerSet flowerSet : flowers.values()) {
       if (flowerSet.getDyeColor() != null) {
         offerShapelessRecipe(consumer, flowerSet.getDyeColor(), flowerSet.getFlowerBlock(), flowerSet.getDyeColor().toString(), flowerSet.getDyeNumber());
@@ -105,11 +106,11 @@ public class NSRecipeGenerator extends FabricRecipeProvider {
     }
   }
 
-  private void generateStoneRecipes(HashMap<String, StoneSet> stoones, RecipeExporter exporter) {
+  private void generateStoneRecipes(HashMap<String, StoneSet> stoones, Consumer<RecipeJsonProvider> exporter) {
     for (StoneSet stoneSet : stoones.values()) {
-      generateFamily(exporter, stoneSet.getBaseFamily(), FeatureSet.of(FeatureFlags.VANILLA));
-      generateFamily(exporter, stoneSet.getBrickFamily(), FeatureSet.of(FeatureFlags.VANILLA));
-      generateFamily(exporter, stoneSet.getPolishedFamily(), FeatureSet.of(FeatureFlags.VANILLA));
+      generateFamily(exporter, stoneSet.getBaseFamily());
+      generateFamily(exporter, stoneSet.getBrickFamily());
+      generateFamily(exporter, stoneSet.getPolishedFamily());
       ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, stoneSet.getBricks(), 4)
           .input('S', stoneSet.getPolished()).pattern("SS")
           .pattern("SS")
@@ -117,7 +118,7 @@ public class NSRecipeGenerator extends FabricRecipeProvider {
           .offerTo(exporter);
 
       if (stoneSet.hasTiles()) {
-        generateFamily(exporter, stoneSet.getTileFamily(), FeatureSet.of(FeatureFlags.VANILLA));
+        generateFamily(exporter, stoneSet.getTileFamily());
         ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, stoneSet.getTiles(), 4)
             .input('S', stoneSet.getBricks())
             .pattern("SS").pattern("SS")
@@ -136,20 +137,20 @@ public class NSRecipeGenerator extends FabricRecipeProvider {
         offerStonecuttingRecipe(exporter, RecipeCategory.DECORATIONS, stoneSet.getTilesWall(), stoneSet.getTiles());
       }
       if (stoneSet.hasCobbled()) {
-        generateFamily(exporter, stoneSet.getCobbledFamily(), FeatureSet.of(FeatureFlags.VANILLA));
+        generateFamily(exporter, stoneSet.getCobbledFamily());
         if (stoneSet.hasMossy()) {
-          generateFamily(exporter, stoneSet.getMossyCobbledFamily(), FeatureSet.of(FeatureFlags.VANILLA));
+          generateFamily(exporter, stoneSet.getMossyCobbledFamily());
           ShapelessRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, stoneSet.getMossyCobbled())
               .input(stoneSet.getCobbled()).input(Blocks.MOSS_BLOCK)
               .group("mossy_cobblestone")
               .criterion("has_moss_block", conditionsFromItem(Blocks.MOSS_BLOCK))
-              .offerTo(exporter, Identifier.of(MOD_ID, convertBetween(stoneSet.getMossyCobbled(), Blocks.MOSS_BLOCK)));
+              .offerTo(exporter, new Identifier(MOD_ID, convertBetween(stoneSet.getMossyCobbled(), Blocks.MOSS_BLOCK)));
           ShapelessRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, stoneSet.getMossyCobbled())
               .input(stoneSet.getCobbled())
               .input(Blocks.VINE)
               .group("mossy_cobblestone")
               .criterion("has_vine", conditionsFromItem(Blocks.VINE))
-              .offerTo(exporter, Identifier.of(MOD_ID, convertBetween(stoneSet.getMossyCobbled(), Blocks.VINE)));
+              .offerTo(exporter, new Identifier(MOD_ID, convertBetween(stoneSet.getMossyCobbled(), Blocks.VINE)));
           offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, stoneSet.getMossyCobbledSlab(), stoneSet.getMossyCobbled(), 2);
           offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, stoneSet.getMossyCobbledStairs(), stoneSet.getMossyCobbled());
           offerStonecuttingRecipe(exporter, RecipeCategory.DECORATIONS, stoneSet.getMossyCobbledWall(), stoneSet.getMossyCobbled());
@@ -162,19 +163,19 @@ public class NSRecipeGenerator extends FabricRecipeProvider {
         offerStonecuttingRecipe(exporter, RecipeCategory.DECORATIONS, stoneSet.getCobbledWall(), stoneSet.getCobbled());
       }
       if (stoneSet.hasMossy()) {
-        generateFamily(exporter, stoneSet.getMossyBrickFamily(), FeatureSet.of(FeatureFlags.VANILLA));
+        generateFamily(exporter, stoneSet.getMossyBrickFamily());
         ShapelessRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, stoneSet.getMossyBricks())
             .input(stoneSet.getBricks())
             .input(Blocks.VINE)
             .group("mossy_stone_bricks")
             .criterion("has_vine", conditionsFromItem(Blocks.VINE))
-            .offerTo(exporter, Identifier.of(MOD_ID, convertBetween(stoneSet.getMossyBricks(), Blocks.VINE)));
+            .offerTo(exporter, new Identifier(MOD_ID, convertBetween(stoneSet.getMossyBricks(), Blocks.VINE)));
         ShapelessRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, stoneSet.getMossyBricks())
             .input(stoneSet.getBricks())
             .input(Blocks.MOSS_BLOCK)
             .group("mossy_stone_bricks")
             .criterion("has_moss_block", conditionsFromItem(Blocks.MOSS_BLOCK))
-            .offerTo(exporter, Identifier.of(MOD_ID, convertBetween(stoneSet.getMossyBricks(), Blocks.MOSS_BLOCK)));
+            .offerTo(exporter, new Identifier(MOD_ID, convertBetween(stoneSet.getMossyBricks(), Blocks.MOSS_BLOCK)));
         offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, stoneSet.getMossyBricksSlab(), stoneSet.getMossyBricks(), 2);
         offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, stoneSet.getMossyBricksStairs(), stoneSet.getMossyBricks());
         offerStonecuttingRecipe(exporter, RecipeCategory.DECORATIONS, stoneSet.getMossyBricksWall(), stoneSet.getMossyBricks());
@@ -209,17 +210,17 @@ public class NSRecipeGenerator extends FabricRecipeProvider {
     }
   }
 
-  public static void offer2x2CompactingTagRecipe(RecipeExporter exporter, RecipeCategory category, ItemConvertible output, TagKey<Item> input) {
+  public static void offer2x2CompactingTagRecipe(Consumer<RecipeJsonProvider> exporter, RecipeCategory category, ItemConvertible output, TagKey<Item> input) {
     ShapedRecipeJsonBuilder.create(category, output, 1).input('#', input).pattern("##").pattern("##").criterion("has_evergreen_leaves", conditionsFromTag(input)).offerTo(exporter);
   }
 
   @Override
   protected Identifier getRecipeIdentifier(Identifier identifier) {
-    return Identifier.of(MOD_ID, identifier.getPath());
+    return new Identifier(MOD_ID, identifier.getPath());
   }
 
   @Override
-  public void generate(RecipeExporter exporter) {
+  public void generate(Consumer<RecipeJsonProvider> exporter) {
     offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ALLUAUDIA_BUNDLE, ALLUAUDIA);
     offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, STRIPPED_ALLUAUDIA_BUNDLE, STRIPPED_ALLUAUDIA);
     createChiseledBlockRecipe(RecipeCategory.BUILDING_BLOCKS, CHISELED_PINK_SANDSTONE, Ingredient.ofItems(PINK_SANDSTONE_SLAB))
@@ -336,10 +337,10 @@ public class NSRecipeGenerator extends FabricRecipeProvider {
     offerShapelessRecipe(exporter, NSWoods.COCONUT_HALF, NSWoods.COCONUT_BLOCK, "coconut_half", 2);
     offerShapelessRecipe(exporter, Items.BOWL, NSWoods.COCONUT_SHELL, "bowl", 1);
     CookingRecipeJsonBuilder.createSmelting(Ingredient.fromTag(NSTags.Items.COCONUT_ITEMS), RecipeCategory.MISC, Items.CHARCOAL, 0.15F, 125)
-        .criterion("has_coconut", conditionsFromTag(NSTags.Items.COCONUT_ITEMS)).offerTo(exporter, Identifier.of(MOD_ID, "charcoal_from_coconuts"));
+        .criterion("has_coconut", conditionsFromTag(NSTags.Items.COCONUT_ITEMS)).offerTo(exporter, new Identifier(MOD_ID, "charcoal_from_coconuts"));
 
-    generateFamily(exporter, CUT_PINK_SANDSTONE_FAMILY, FeatureSet.of(FeatureFlags.VANILLA));
-    generateFamily(exporter, SMOOTH_PINK_SANDSTONE_FAMILY, FeatureSet.of(FeatureFlags.VANILLA));
+    generateFamily(exporter, CUT_PINK_SANDSTONE_FAMILY);
+    generateFamily(exporter, SMOOTH_PINK_SANDSTONE_FAMILY);
 
   }
 }

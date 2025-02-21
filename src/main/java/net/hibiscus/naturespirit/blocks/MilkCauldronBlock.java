@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSMiscBlocks;
 import net.hibiscus.naturespirit.registration.NSParticleTypes;
 import net.hibiscus.naturespirit.registration.NSTags;
@@ -17,12 +16,13 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.NotNull;
 
 public class MilkCauldronBlock extends AbstractCauldronBlock {
@@ -34,10 +34,6 @@ public class MilkCauldronBlock extends AbstractCauldronBlock {
     this.setDefaultState(this.stateManager.getDefaultState().with(AGE_INTO_CHEESE, false));
   }
 
-  @Override
-  protected MapCodec<? extends AbstractCauldronBlock> getCodec() {
-    return null;
-  }
 
   @Override
   protected double getFluidHeight(BlockState state) {
@@ -50,8 +46,8 @@ public class MilkCauldronBlock extends AbstractCauldronBlock {
   }
 
   @Override
-  public ActionResult onUse(BlockState state, World world, BlockPos pos, @NotNull PlayerEntity player, BlockHitResult hit) {
-    if (player.getStackInHand(player.getActiveHand()).isIn(NSTags.Items.CHEESE_MAKER) && !state.get(AGE_INTO_CHEESE)) {
+  public ActionResult onUse(BlockState state, World world, BlockPos pos, @NotNull PlayerEntity player, Hand hand, BlockHitResult hit) {
+    if (player.getStackInHand(hand).isIn(NSTags.Items.CHEESE_MAKER) && !state.get(AGE_INTO_CHEESE)) {
       world.setBlockState(pos, state.with(AGE_INTO_CHEESE, true), Block.NOTIFY_LISTENERS);
       BlockState blockState = world.getBlockState(pos);
       world.playSound(null, pos, SoundEvents.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, SoundCategory.BLOCKS, 1F, 1F);
@@ -73,10 +69,10 @@ public class MilkCauldronBlock extends AbstractCauldronBlock {
         );
       }
       if (!player.isCreative() && !player.isSpectator()) {
-        ItemStack itemStack = player.getStackInHand(player.getActiveHand()).getRecipeRemainder();
-        player.getStackInHand(player.getActiveHand()).decrement(1);
-        if (player.getStackInHand(player.getActiveHand()).isEmpty()) {
-          player.setStackInHand(player.getActiveHand(), itemStack);
+        ItemStack itemStack = player.getStackInHand(hand).getRecipeRemainder();
+        player.getStackInHand(hand).decrement(1);
+        if (player.getStackInHand(hand).isEmpty()) {
+          player.setStackInHand(hand, itemStack);
         } else {
           if (player.getInventory().insertStack(itemStack)) {
             player.dropItem(itemStack, false);
@@ -85,7 +81,7 @@ public class MilkCauldronBlock extends AbstractCauldronBlock {
       }
       return ActionResult.SUCCESS;
     }
-    return super.onUse(state, world, pos, player, hit);
+    return super.onUse(state, world, pos, player, hand, hit);
   }
 
   @Override
@@ -97,7 +93,7 @@ public class MilkCauldronBlock extends AbstractCauldronBlock {
   }
 
   @Override
-  public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+  public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
     return new ItemStack(Blocks.CAULDRON);
   }
 

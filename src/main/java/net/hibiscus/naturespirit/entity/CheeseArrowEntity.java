@@ -13,16 +13,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class CheeseArrowEntity extends PersistentProjectileEntity {
 
+
   public CheeseArrowEntity(EntityType<? extends CheeseArrowEntity> entityType, World world) {
     super(entityType, world);
   }
 
-  public CheeseArrowEntity(World world, LivingEntity owner, ItemStack stack, @Nullable ItemStack weapon) {
-    super(NSEntityTypes.CHEESE_ARROW, owner, world, stack, weapon);
+  public CheeseArrowEntity(World world, LivingEntity owner) {
+    super(NSEntityTypes.CHEESE_ARROW, owner, world);
   }
 
-  public CheeseArrowEntity(double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
-    super(NSEntityTypes.CHEESE_ARROW, x, y, z, world, stack, weapon);
+  public CheeseArrowEntity(World world, double x, double y, double z) {
+    super(NSEntityTypes.CHEESE_ARROW, x, y, z, world);
   }
 
   public void tick() {
@@ -34,7 +35,7 @@ public class CheeseArrowEntity extends PersistentProjectileEntity {
   }
 
   @Override
-  protected ItemStack getDefaultItemStack() {
+  protected ItemStack asItemStack() {
     return new ItemStack(NSMiscBlocks.CHEESE_ARROW);
   }
 

@@ -664,7 +664,7 @@ public class NSPlacedFeatures {
   }
 
   public static RegistryKey<PlacedFeature> registerKey(String name) {
-    return RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(NatureSpirit.MOD_ID, name));
+    return RegistryKey.of(RegistryKeys.PLACED_FEATURE, new Identifier(NatureSpirit.MOD_ID, name));
   }
 
   private static void registerKey(Registerable<PlacedFeature> context, RegistryKey<PlacedFeature> key, RegistryEntry<ConfiguredFeature<?, ?>> configuration,

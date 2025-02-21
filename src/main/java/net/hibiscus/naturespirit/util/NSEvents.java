@@ -46,7 +46,7 @@ public class NSEvents {
         world.setBlockState(blockPos, blockState2, 11);
         world.emitGameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Emitter.of(player, blockState2));
         if (player != null) {
-          player.getStackInHand(hand).damage(1, player, LivingEntity.getSlotForHand(player.getActiveHand()));
+          player.getStackInHand(hand).damage(1, player, (playerEntity -> playerEntity.sendToolBreakStatus(hand)));
         }
 
         return ActionResult.success(world.isClient);

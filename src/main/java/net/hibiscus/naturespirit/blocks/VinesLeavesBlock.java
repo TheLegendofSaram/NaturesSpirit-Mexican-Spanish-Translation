@@ -27,7 +27,7 @@ public class VinesLeavesBlock extends LeavesBlock implements Fertilizable {
   }
 
   @Override
-  public boolean isFertilizable(@NotNull WorldView levelReader, @NotNull BlockPos blockPos, BlockState state) {
+  public boolean isFertilizable(@NotNull WorldView levelReader, @NotNull BlockPos blockPos, BlockState state, boolean bl) {
     Optional<BlockPos> optional = BlockLocating.findColumnEnd(levelReader, blockPos, vinePlantBlock, Direction.DOWN, vineTipBlock);
     return (optional.isPresent() && levelReader.getBlockState(optional.get().offset(Direction.DOWN)).isAir()) || levelReader.getBlockState(blockPos.offset(Direction.DOWN)).isAir();
   }

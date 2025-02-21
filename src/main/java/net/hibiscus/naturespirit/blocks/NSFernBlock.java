@@ -2,13 +2,13 @@ package net.hibiscus.naturespirit.blocks;
 
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ShortPlantBlock;
+import net.minecraft.block.FernBlock;
 import net.minecraft.block.TallPlantBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 
-public class NSFernBlock extends ShortPlantBlock {
+public class NSFernBlock extends FernBlock {
 
   TallPlantBlock tallPlantBlock;
 

@@ -23,7 +23,7 @@ public class NSDataGen implements DataGeneratorEntrypoint {
     pack.addProvider(NSModelGenerator::new);
     pack.addProvider(NSLangGenerator::new);
     pack.addProvider(NSRecipeGenerator::new);
-    pack.addProvider(NSBlockLootTableProvider::new);
+    pack.addProvider((dataOutput, registryLookup) -> new NSBlockLootTableProvider(dataOutput));
     NSBlockTagGenerator blockTagProvider = pack.addProvider(NSBlockTagGenerator::new);
     pack.addProvider((output, registries) -> new NSItemTagGenerator(output, registries, blockTagProvider));
     System.out.println("Initialized Data Generator");

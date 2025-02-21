@@ -1,6 +1,6 @@
 package net.hibiscus.naturespirit.registration;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityType;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
@@ -19,14 +19,12 @@ import net.hibiscus.naturespirit.registration.sets.FlowerSet;
 import net.hibiscus.naturespirit.registration.sets.StoneSet;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.enums.NoteBlockInstrument;
+import net.minecraft.block.enums.Instrument;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.*;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ColorCode;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.intprovider.ConstantIntProvider;
@@ -47,15 +45,15 @@ public class NSMiscBlocks {
       Items.MOSS_CARPET, ItemGroups.NATURAL);
 
   public static final Block SANDY_SOIL = registerBlock("sandy_soil",
-      new Block(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).instrument(NoteBlockInstrument.BASEDRUM).strength(0.5F).sounds(BlockSoundGroup.GRAVEL)),
+      new Block(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).instrument(Instrument.BASEDRUM).strength(0.5F).sounds(BlockSoundGroup.GRAVEL)),
       Blocks.FARMLAND, ItemGroups.NATURAL);
 
-  public static final Block PINK_SAND = registerBlock("pink_sand", new ColoredFallingBlock(new ColorCode(14331784),
-      AbstractBlock.Settings.create().mapColor(MapColor.RAW_IRON_PINK).instrument(NoteBlockInstrument.SNARE).strength(0.5F).sounds(BlockSoundGroup.SAND)),
+  public static final Block PINK_SAND = registerBlock("pink_sand", new SandBlock(14331784,
+      AbstractBlock.Settings.create().mapColor(MapColor.RAW_IRON_PINK).instrument(Instrument.SNARE).strength(0.5F).sounds(BlockSoundGroup.SAND)),
       Blocks.RED_SANDSTONE, ItemGroups.NATURAL);
 
   public static final Block PINK_SANDSTONE = registerBlock("pink_sandstone",
-      new Block(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(0.8F)),
+      new Block(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).requiresTool().strength(0.8F)),
       PINK_SAND, ItemGroups.NATURAL, Blocks.CUT_RED_SANDSTONE_SLAB, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block PINK_SANDSTONE_STAIRS = registerBlock("pink_sandstone_stairs",
@@ -63,18 +61,18 @@ public class NSMiscBlocks {
       PINK_SANDSTONE, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block PINK_SANDSTONE_SLAB = registerBlock("pink_sandstone_slab",
-      new SlabBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(2.0F, 6.0F)),
+      new SlabBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).requiresTool().strength(2.0F, 6.0F)),
       PINK_SANDSTONE_STAIRS, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block PINK_SANDSTONE_WALL = registerBlock("pink_sandstone_wall", new WallBlock(AbstractBlock.Settings.copy(PINK_SANDSTONE).solid()),
       PINK_SANDSTONE_SLAB, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block CHISELED_PINK_SANDSTONE = registerBlock("chiseled_pink_sandstone",
-      new Block(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(0.8F)),
+      new Block(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).requiresTool().strength(0.8F)),
       PINK_SANDSTONE_WALL, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block SMOOTH_PINK_SANDSTONE = registerBlock("smooth_pink_sandstone",
-      new Block(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(2.0F, 6.0F)),
+      new Block(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).requiresTool().strength(2.0F, 6.0F)),
       CHISELED_PINK_SANDSTONE, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block SMOOTH_PINK_SANDSTONE_STAIRS = registerBlock("smooth_pink_sandstone_stairs",
@@ -84,11 +82,11 @@ public class NSMiscBlocks {
   public static final Block SMOOTH_PINK_SANDSTONE_SLAB = registerBlock("smooth_pink_sandstone_slab", new SlabBlock(AbstractBlock.Settings.copy(SMOOTH_PINK_SANDSTONE)), SMOOTH_PINK_SANDSTONE_STAIRS, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block CUT_PINK_SANDSTONE = registerBlock("cut_pink_sandstone",
-      new Block(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(0.8F)),
+      new Block(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).requiresTool().strength(0.8F)),
       SMOOTH_PINK_SANDSTONE_SLAB, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block CUT_PINK_SANDSTONE_SLAB = registerBlock("cut_pink_sandstone_slab",
-      new SlabBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(2.0F, 6.0F)),
+      new SlabBlock(AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW).instrument(Instrument.BASEDRUM).requiresTool().strength(2.0F, 6.0F)),
       CUT_PINK_SANDSTONE, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block TALL_FRIGID_GRASS = registerTallPlantBlock("tall_frigid_grass", new SemiTallGrassBlock(
@@ -273,7 +271,7 @@ public class NSMiscBlocks {
           .postProcess(Blocks::always).pistonBehavior(PistonBehavior.DESTROY), NSConfiguredFeatures.HUGE_SHIITAKE_MUSHROOM), Blocks.RED_MUSHROOM, 0.1F);
 
   public static final Block SHIITAKE_MUSHROOM_BLOCK = registerBlock("shiitake_mushroom_block",
-      new MushroomBlock(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).instrument(NoteBlockInstrument.BASS).strength(0.2F).sounds(BlockSoundGroup.WOOD).burnable()),
+      new MushroomBlock(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).instrument(Instrument.BASS).strength(0.2F).sounds(BlockSoundGroup.WOOD).burnable()),
 
       Blocks.RED_MUSHROOM_BLOCK, ItemGroups.NATURAL);
 
@@ -282,7 +280,7 @@ public class NSMiscBlocks {
           .postProcess(Blocks::always).pistonBehavior(PistonBehavior.DESTROY), NSConfiguredFeatures.GRAY_POLYPORE), SHIITAKE_MUSHROOM, 0.1F);
 
   public static final Block GRAY_POLYPORE_BLOCK = registerBlock("gray_polypore_block", new MushroomBlock(
-          AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY).instrument(NoteBlockInstrument.BASS).strength(0.2F).sounds(BlockSoundGroup.WOOD).burnable()),
+          AbstractBlock.Settings.create().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY).instrument(Instrument.BASS).strength(0.2F).sounds(BlockSoundGroup.WOOD).burnable()),
 
       SHIITAKE_MUSHROOM_BLOCK, ItemGroups.NATURAL);
 
@@ -423,23 +421,23 @@ public class NSMiscBlocks {
   public static final Block STRIPPED_ALLUAUDIA_BUNDLE = registerPlantBlock("stripped_alluaudia_bundle",
       new PillarBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).nonOpaque().sounds(BlockSoundGroup.VINE).hardness(.6f).strength(.6f)), ALLUAUDIA_BUNDLE, .2f);
 
-  public static final FoodComponent OLIVE_COMPONENT = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.4F).build();
+  public static final FoodComponent OLIVE_COMPONENT = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.4F).build();
 
   public static final Item OLIVES = registerPlantItem("olives", new Item(new Item.Settings().food(OLIVE_COMPONENT)), Items.BEETROOT, ItemGroups.FOOD_AND_DRINK, 0.3F);
 
   public static final Block DESERT_TURNIP_ROOT_BLOCK = registerBlock("desert_turnip_root_block",
-      new PillarBlock(AbstractBlock.Settings.create().burnable().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.SPRUCE_BROWN).strength(1.0F).sounds(BlockSoundGroup.ROOTS)),
+      new PillarBlock(AbstractBlock.Settings.create().burnable().instrument(Instrument.BASS).mapColor(MapColor.SPRUCE_BROWN).strength(1.0F).sounds(BlockSoundGroup.ROOTS)),
       Blocks.SHROOMLIGHT, ItemGroups.NATURAL);
 
   public static final Block DESERT_TURNIP_BLOCK = registerBlock("desert_turnip_block", new DesertTurnipBlock(
-      AbstractBlock.Settings.create().burnable().instrument(NoteBlockInstrument.BASS).mapColor(MapColor.PALE_PURPLE).strength(1.0F).sounds(BlockSoundGroup.ROOTS)),
+      AbstractBlock.Settings.create().burnable().instrument(Instrument.BASS).mapColor(MapColor.PALE_PURPLE).strength(1.0F).sounds(BlockSoundGroup.ROOTS)),
       NSMiscBlocks.DESERT_TURNIP_ROOT_BLOCK, ItemGroups.NATURAL);
 
   public static final Block DESERT_TURNIP_STEM = registerTransparentBlockWithoutTab("desert_turnip_stem",
       new DesertTurnipStemBlock((DesertTurnipBlock) DESERT_TURNIP_BLOCK, DESERT_TURNIP_ROOT_BLOCK,
           AbstractBlock.Settings.create().noCollision().breakInstantly().ticksRandomly().sounds(BlockSoundGroup.GRASS).pistonBehavior(PistonBehavior.DESTROY)));
 
-  public static final FoodComponent DESERT_TURNIP_FOOD_COMPONENT = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.3F).snack().build();
+  public static final FoodComponent DESERT_TURNIP_FOOD_COMPONENT = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.3F).snack().build();
 
   public static final Item DESERT_TURNIP = registerItem("desert_turnip", new DesertTurnipItem(DESERT_TURNIP_STEM, (new Item.Settings()).food(DESERT_TURNIP_FOOD_COMPONENT)), Items.BEETROOT, ItemGroups.FOOD_AND_DRINK);
 
@@ -455,11 +453,11 @@ public class NSMiscBlocks {
 
   public static final Block CHEESE_CAULDRON = registerBlockWithoutTab("cheese_cauldron", new CheeseCauldronBlock(AbstractBlock.Settings.copy(Blocks.CAULDRON).dropsLike(Blocks.CAULDRON)));
 
-  public static final FoodComponent STANDARD_PIZZA_COMPONENT = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.2F).build();
+  public static final FoodComponent STANDARD_PIZZA_COMPONENT = (new FoodComponent.Builder()).hunger(2).saturationModifier(0.2F).build();
 
   public static final Block PIZZA_BLOCK = registerBlockWithoutTab("pizza_block", new PizzaBlock(AbstractBlock.Settings.copy(Blocks.CAKE)));
 
-  public static final BlockEntityType<PizzaBlockEntity> PIZZA_BLOCK_ENTITY_TYPE = registerBlockEntity("pizza_block_entity", BlockEntityType.Builder.create(PizzaBlockEntity::new, PIZZA_BLOCK));
+  public static final BlockEntityType<PizzaBlockEntity> PIZZA_BLOCK_ENTITY_TYPE = registerBlockEntity("pizza_block_entity", FabricBlockEntityTypeBuilder.create(PizzaBlockEntity::new, PIZZA_BLOCK));
 
   public static final Item WHOLE_PIZZA = registerItem("whole_pizza", new PizzaItem(PIZZA_BLOCK, new Item.Settings().maxCount(1).food(STANDARD_PIZZA_COMPONENT)), Items.BREAD, ItemGroups.FOOD_AND_DRINK);
 
@@ -483,83 +481,61 @@ public class NSMiscBlocks {
       new AmethystClusterBlock(3, 4, AbstractBlock.Settings.copy(CALCITE_CLUSTER).sounds(BlockSoundGroup.CALCITE).solid().pistonBehavior(PistonBehavior.DESTROY)),
       LARGE_CALCITE_BUD, ItemGroups.NATURAL);
 
-  public static final StoneSet TRAVERTINE = new StoneSet(Identifier.of(MOD_ID, "travertine"), MapColor.LIGHT_GRAY, Items.POLISHED_ANDESITE_SLAB, Items.ANDESITE, 1.5F, true, true,
+  public static final StoneSet TRAVERTINE = new StoneSet(new Identifier(MOD_ID, "travertine"), MapColor.LIGHT_GRAY, Items.POLISHED_ANDESITE_SLAB, Items.ANDESITE, 1.5F, true, true,
       true, true);
 
-  public static final StoneSet CHERT = new StoneSet(Identifier.of(MOD_ID, "chert"), MapColor.OAK_TAN, TRAVERTINE.getTilesSlab().asItem(), TRAVERTINE.getBase().asItem(), .9F, false,
+  public static final StoneSet CHERT = new StoneSet(new Identifier(MOD_ID, "chert"), MapColor.OAK_TAN, TRAVERTINE.getTilesSlab().asItem(), TRAVERTINE.getBase().asItem(), .9F, false,
       true, false, true, true);
 
-  public static final Block CHERT_GOLD_ORE = registerBlock("chert_gold_ore",
-      new ExperienceDroppingBlock(ConstantIntProvider.create(0), AbstractBlock.Settings.copyShallow(Blocks.GOLD_ORE).mapColor(MapColor.OAK_TAN).strength(.9f)), Items.GOLD_ORE, ItemGroups.NATURAL);
-
-  public static final Block CHERT_IRON_ORE = registerBlock("chert_iron_ore",
-      new ExperienceDroppingBlock(ConstantIntProvider.create(0), AbstractBlock.Settings.copyShallow(Blocks.IRON_ORE).mapColor(MapColor.OAK_TAN).strength(.9f)), Items.IRON_ORE, ItemGroups.NATURAL);
-
-  public static final Block CHERT_COAL_ORE = registerBlock("chert_coal_ore",
-      new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), AbstractBlock.Settings.copyShallow(Blocks.COAL_ORE).mapColor(MapColor.OAK_TAN).strength(.9f)), Items.COAL_ORE, ItemGroups.NATURAL);
-
-  public static final Block CHERT_LAPIS_ORE = registerBlock("chert_lapis_ore",
-      new ExperienceDroppingBlock(UniformIntProvider.create(2, 5), AbstractBlock.Settings.copyShallow(Blocks.LAPIS_ORE).mapColor(MapColor.OAK_TAN).strength(.9f)), Items.LAPIS_ORE, ItemGroups.NATURAL);
-
-  public static final Block CHERT_DIAMOND_ORE = registerBlock("chert_diamond_ore",
-      new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.copyShallow(Blocks.DIAMOND_ORE).mapColor(MapColor.OAK_TAN).strength(.9f)), Items.DIAMOND_ORE, ItemGroups.NATURAL);
-
-  public static final Block CHERT_REDSTONE_ORE = registerBlock("chert_redstone_ore",
-      new RedstoneOreBlock(AbstractBlock.Settings.copyShallow(Blocks.REDSTONE_ORE).mapColor(MapColor.OAK_TAN).strength(.6f)), Items.REDSTONE_ORE, ItemGroups.NATURAL);
-
-  public static final Block CHERT_EMERALD_ORE = registerBlock("chert_emerald_ore",
-      new ExperienceDroppingBlock(UniformIntProvider.create(3, 7), AbstractBlock.Settings.copyShallow(Blocks.EMERALD_ORE).mapColor(MapColor.OAK_TAN).strength(.6f)), Items.EMERALD_ORE, ItemGroups.NATURAL);
-
-  public static final Block CHERT_COPPER_ORE = registerBlock("chert_copper_ore",
-      new ExperienceDroppingBlock(ConstantIntProvider.create(0), AbstractBlock.Settings.copyShallow(Blocks.COPPER_ORE).mapColor(MapColor.OAK_TAN).strength(.6f)), Items.COPPER_ORE, ItemGroups.NATURAL);
+  public static final Block CHERT_GOLD_ORE = registerBlock("chert_gold_ore", new ExperienceDroppingBlock(AbstractBlock.Settings.copy(Blocks.GOLD_ORE).mapColor(MapColor.OAK_TAN).strength(.9f), ConstantIntProvider.create(0)), Items.GOLD_ORE, ItemGroups.NATURAL);
+  public static final Block CHERT_IRON_ORE = registerBlock("chert_iron_ore", new ExperienceDroppingBlock(AbstractBlock.Settings.copy(Blocks.IRON_ORE).mapColor(MapColor.OAK_TAN).strength(.9f), ConstantIntProvider.create(0)), Items.IRON_ORE, ItemGroups.NATURAL);
+  public static final Block CHERT_COAL_ORE = registerBlock("chert_coal_ore", new ExperienceDroppingBlock(AbstractBlock.Settings.copy(Blocks.COAL_ORE).mapColor(MapColor.OAK_TAN).strength(.9f), UniformIntProvider.create(0, 2)), Items.COAL_ORE, ItemGroups.NATURAL);
+  public static final Block CHERT_LAPIS_ORE = registerBlock("chert_lapis_ore", new ExperienceDroppingBlock(AbstractBlock.Settings.copy(Blocks.LAPIS_ORE).mapColor(MapColor.OAK_TAN).strength(.9f), UniformIntProvider.create(2, 5)), Items.LAPIS_ORE, ItemGroups.NATURAL);
+  public static final Block CHERT_DIAMOND_ORE = registerBlock("chert_diamond_ore", new ExperienceDroppingBlock(AbstractBlock.Settings.copy(Blocks.DIAMOND_ORE).mapColor(MapColor.OAK_TAN).strength(.9f), UniformIntProvider.create(3, 7)), Items.DIAMOND_ORE, ItemGroups.NATURAL);
+  public static final Block CHERT_REDSTONE_ORE = registerBlock("chert_redstone_ore", new RedstoneOreBlock(AbstractBlock.Settings.copy(Blocks.REDSTONE_ORE).mapColor(MapColor.OAK_TAN).strength(.6f)), Items.REDSTONE_ORE, ItemGroups.NATURAL);
+  public static final Block CHERT_EMERALD_ORE = registerBlock("chert_emerald_ore", new ExperienceDroppingBlock(AbstractBlock.Settings.copy(Blocks.EMERALD_ORE).mapColor(MapColor.OAK_TAN).strength(.6f), UniformIntProvider.create(3, 7)), Items.EMERALD_ORE, ItemGroups.NATURAL);
+  public static final Block CHERT_COPPER_ORE = registerBlock("chert_copper_ore", new ExperienceDroppingBlock(AbstractBlock.Settings.copy(Blocks.COPPER_ORE).mapColor(MapColor.OAK_TAN).strength(.6f), ConstantIntProvider.create(0)), Items.COPPER_ORE, ItemGroups.NATURAL);
 
 
-  public static final BlockSetType PAPER_BLOCK_SET = BlockSetTypeBuilder.copyOf(BlockSetType.CHERRY).register(Identifier.of(MOD_ID, "paper"));
+  public static final BlockSetType PAPER_BLOCK_SET = BlockSetTypeBuilder.copyOf(BlockSetType.CHERRY).register(new Identifier(MOD_ID, "paper"));
 
-  public static final WoodType PAPER_WOOD_TYPE = new WoodTypeBuilder().register(Identifier.of(MOD_ID, "paper"), PAPER_BLOCK_SET);
+  public static final WoodType PAPER_WOOD_TYPE = new WoodTypeBuilder().register(new Identifier(MOD_ID, "paper"), PAPER_BLOCK_SET);
 
   public static final Block PAPER_BLOCK = registerBlock("paper_block", new Block(AbstractBlock.Settings.copy(NSWoods.SUGI.getPlanks())), Items.WARPED_BUTTON, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block PAPER_PANEL = registerBlock("paper_panel", new PaneBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getPlanks()).nonOpaque()), PAPER_BLOCK, ItemGroups.BUILDING_BLOCKS);
 
-  public static final Block PAPER_DOOR = registerTransparentBlock("paper_door", new DoorBlock(PAPER_BLOCK_SET, AbstractBlock.Settings.copy(NSWoods.SUGI.getDoor())), PAPER_PANEL, ItemGroups.BUILDING_BLOCKS);
+  public static final Block PAPER_DOOR = registerTransparentBlock("paper_door", new DoorBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getDoor()), PAPER_BLOCK_SET), PAPER_PANEL, ItemGroups.BUILDING_BLOCKS);
 
-  public static final Block PAPER_TRAPDOOR = registerTransparentBlock("paper_trapdoor", new TrapdoorBlock(PAPER_BLOCK_SET,
-      AbstractBlock.Settings.create().burnable().instrument(NoteBlockInstrument.BASS).strength(3.0f).sounds(BlockSoundGroup.WOOD).allowsSpawning(NSRegistryHelper::never)
-          .nonOpaque()), PAPER_DOOR, ItemGroups.BUILDING_BLOCKS);
+  public static final Block PAPER_TRAPDOOR = registerTransparentBlock("paper_trapdoor", new TrapdoorBlock(AbstractBlock.Settings.create().burnable().instrument(Instrument.BASS).strength(3.0f).sounds(BlockSoundGroup.WOOD).allowsSpawning(NSRegistryHelper::never).nonOpaque(), PAPER_BLOCK_SET), PAPER_DOOR, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block FRAMED_PAPER_BLOCK = registerBlock("framed_paper_block", new Block(AbstractBlock.Settings.copy(NSWoods.SUGI.getPlanks())), PAPER_TRAPDOOR, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block FRAMED_PAPER_PANEL = registerBlock("framed_paper_panel", new PaneBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getPlanks()).nonOpaque()), FRAMED_PAPER_BLOCK, ItemGroups.BUILDING_BLOCKS);
 
-  public static final Block FRAMED_PAPER_DOOR = registerTransparentBlock("framed_paper_door", new DoorBlock(PAPER_BLOCK_SET, AbstractBlock.Settings.copy(NSWoods.SUGI.getDoor())), FRAMED_PAPER_PANEL, ItemGroups.BUILDING_BLOCKS);
+  public static final Block FRAMED_PAPER_DOOR = registerTransparentBlock("framed_paper_door", new DoorBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getDoor()), PAPER_BLOCK_SET), FRAMED_PAPER_PANEL, ItemGroups.BUILDING_BLOCKS);
 
-  public static final Block FRAMED_PAPER_TRAPDOOR = registerTransparentBlock("framed_paper_trapdoor", new TrapdoorBlock(PAPER_BLOCK_SET,
-      AbstractBlock.Settings.create().burnable().instrument(NoteBlockInstrument.BASS).strength(3.0f).sounds(BlockSoundGroup.WOOD).allowsSpawning(NSRegistryHelper::never)
-          .nonOpaque()), FRAMED_PAPER_DOOR, ItemGroups.BUILDING_BLOCKS);
+  public static final Block FRAMED_PAPER_TRAPDOOR = registerTransparentBlock("framed_paper_trapdoor", new TrapdoorBlock(AbstractBlock.Settings.create().burnable().instrument(Instrument.BASS).strength(3.0f).sounds(BlockSoundGroup.WOOD).allowsSpawning(NSRegistryHelper::never).nonOpaque(), PAPER_BLOCK_SET), FRAMED_PAPER_DOOR, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block BLOOMING_PAPER_BLOCK = registerBlock("blooming_paper_block", new GlazedTerracottaBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getPlanks())), FRAMED_PAPER_TRAPDOOR, ItemGroups.BUILDING_BLOCKS);
 
   public static final Block BLOOMING_PAPER_PANEL = registerBlock("blooming_paper_panel", new PaneBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getPlanks()).nonOpaque()), BLOOMING_PAPER_BLOCK, ItemGroups.BUILDING_BLOCKS);
 
-  public static final Block BLOOMING_PAPER_DOOR = registerTransparentBlock("blooming_paper_door",
-      new DoorBlock(PAPER_BLOCK_SET, AbstractBlock.Settings.copy(NSWoods.SUGI.getDoor())), BLOOMING_PAPER_PANEL, ItemGroups.BUILDING_BLOCKS);
+  public static final Block BLOOMING_PAPER_DOOR = registerTransparentBlock("blooming_paper_door", new DoorBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getDoor()), PAPER_BLOCK_SET), BLOOMING_PAPER_PANEL, ItemGroups.BUILDING_BLOCKS);
 
-  public static final Block BLOOMING_PAPER_TRAPDOOR = registerTransparentBlock("blooming_paper_trapdoor", new TrapdoorBlock(PAPER_BLOCK_SET,
-      AbstractBlock.Settings.create().burnable().instrument(NoteBlockInstrument.BASS).strength(3.0f).sounds(BlockSoundGroup.WOOD).allowsSpawning(NSRegistryHelper::never)
-          .nonOpaque()), BLOOMING_PAPER_DOOR, ItemGroups.BUILDING_BLOCKS);
+  public static final Block BLOOMING_PAPER_TRAPDOOR = registerTransparentBlock("blooming_paper_trapdoor", new TrapdoorBlock(AbstractBlock.Settings.create().burnable().instrument(Instrument.BASS).strength(3.0f).sounds(BlockSoundGroup.WOOD).allowsSpawning(NSRegistryHelper::never).nonOpaque(), PAPER_BLOCK_SET), BLOOMING_PAPER_DOOR, ItemGroups.BUILDING_BLOCKS);
 
 
-  public static final Block PAPER_SIGN = registerBlockWithoutTab("paper_sign", new SignBlock(PAPER_WOOD_TYPE, AbstractBlock.Settings.copy(NSWoods.SUGI.getSign())));
+  public static final Block PAPER_SIGN = registerBlockWithoutTab("paper_sign", new SignBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getSign()), PAPER_WOOD_TYPE));
 
   public static final Block PAPER_WALL_SIGN = registerBlockWithoutTab("paper_wall_sign",
-      new WallSignBlock(PAPER_WOOD_TYPE, AbstractBlock.Settings.copy(NSWoods.SUGI.getSign()).dropsLike(PAPER_SIGN)));
+      new WallSignBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getSign()).dropsLike(PAPER_SIGN), PAPER_WOOD_TYPE));
 
   public static final Block PAPER_HANGING_SIGN = registerBlockWithoutTab("paper_hanging_sign",
-      new HangingSignBlock(PAPER_WOOD_TYPE, AbstractBlock.Settings.copy(NSWoods.SUGI.getHangingSign())));
+      new HangingSignBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getHangingSign()), PAPER_WOOD_TYPE));
 
   public static final Block PAPER_WALL_HANGING_SIGN = registerBlockWithoutTab("paper_wall_hanging_sign",
-      new WallHangingSignBlock(PAPER_WOOD_TYPE, AbstractBlock.Settings.copy(NSWoods.SUGI.getHangingSign()).dropsLike(PAPER_HANGING_SIGN)));
+      new WallHangingSignBlock(AbstractBlock.Settings.copy(NSWoods.SUGI.getHangingSign()).dropsLike(PAPER_HANGING_SIGN), PAPER_WOOD_TYPE));
 
   public static final Item PAPER_SIGN_ITEM = registerItem("paper_sign", new SignItem(new Item.Settings().maxCount(16), PAPER_SIGN, PAPER_WALL_SIGN), Items.WARPED_SIGN, ItemGroups.FUNCTIONAL);
 
@@ -614,13 +590,5 @@ public class NSMiscBlocks {
     CompostingChanceRegistry.INSTANCE.add(ORNATE_SUCCULENT_ITEM, .65F);
     CompostingChanceRegistry.INSTANCE.add(REGAL_SUCCULENT_ITEM, .65F);
     StrippableBlockRegistry.register(ALLUAUDIA_BUNDLE, STRIPPED_ALLUAUDIA_BUNDLE);
-
-    FabricBlockEntityType signEntity = BlockEntityType.SIGN;
-    signEntity.addSupportedBlock(PAPER_SIGN);
-    signEntity.addSupportedBlock(PAPER_WALL_SIGN);
-
-    FabricBlockEntityType hangingSignEntity = BlockEntityType.HANGING_SIGN;
-    hangingSignEntity.addSupportedBlock(PAPER_HANGING_SIGN);
-    hangingSignEntity.addSupportedBlock(PAPER_WALL_HANGING_SIGN);
   }
 }

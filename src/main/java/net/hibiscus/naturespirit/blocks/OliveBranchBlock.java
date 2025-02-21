@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSMiscBlocks;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
@@ -16,11 +15,11 @@ import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.event.GameEvent;
@@ -41,12 +40,7 @@ public class OliveBranchBlock extends RodBlock implements Fertilizable {
   }
 
   @Override
-  protected MapCodec<? extends RodBlock> getCodec() {
-    return null;
-  }
-
-  @Override
-  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean bl) {
     return state.get(AGE) < 3 || ((world.getBlockState(pos.offset(state.get(FACING), 1)).isOf(Blocks.AIR) || world.getBlockState(pos.offset(state.get(FACING).getOpposite(), 1)).isOf(Blocks.AIR)) && state.get(AGE) == 3);
   }
 
@@ -54,18 +48,19 @@ public class OliveBranchBlock extends RodBlock implements Fertilizable {
   public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
     return true;
   }
-  protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+
+  @Override
+  public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
     return type == NavigationType.AIR;
   }
 
-  protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-    return stack.isOf(Items.BONE_MEAL) ? ItemActionResult.SKIP_DEFAULT_BLOCK_INTERACTION : super.onUseWithItem(stack, state, world, pos, player, hand, hit);
-  }
-
   @Override
-  public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+  public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
     int i = state.get(AGE);
     boolean bl = i == 3;
+    if (player.getStackInHand(hand).isOf(Items.BONE_MEAL)) {
+      return ActionResult.PASS;
+    }
     if (i > 1) {
       int j = 1 + world.random.nextInt(2);
       dropStack(world, pos, new ItemStack(NSMiscBlocks.OLIVES, j + (bl ? 1 : 0)));
@@ -74,7 +69,7 @@ public class OliveBranchBlock extends RodBlock implements Fertilizable {
       world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
       return ActionResult.success(world.isClient());
     }
-    return super.onUse(state, world, pos, player, hit);
+    return super.onUse(state, world, pos, player, hand, hit);
 
   }
 

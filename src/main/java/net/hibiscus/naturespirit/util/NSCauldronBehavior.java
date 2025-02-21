@@ -2,15 +2,18 @@ package net.hibiscus.naturespirit.util;
 
 import net.hibiscus.naturespirit.registration.NSMiscBlocks;
 import net.minecraft.block.cauldron.CauldronBehavior;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
+
+import java.util.Map;
 
 import static net.minecraft.block.cauldron.CauldronBehavior.*;
 
 public interface NSCauldronBehavior {
 
-  CauldronBehaviorMap MILK_CAULDRON_BEHAVIOR = createMap("milk");
+  Map <Item, CauldronBehavior> MILK_CAULDRON_BEHAVIOR = createMap();
   CauldronBehavior FILL_WITH_MILK = (state, world, pos, player, hand, stack) -> fillCauldron(
       world,
       pos,
@@ -20,7 +23,7 @@ public interface NSCauldronBehavior {
       NSMiscBlocks.MILK_CAULDRON.getDefaultState(),
       SoundEvents.ITEM_BUCKET_EMPTY
   );
-  CauldronBehaviorMap CHEESE_CAULDRON_BEHAVIOR = createMap("cheese");
+  Map<Item, CauldronBehavior> CHEESE_CAULDRON_BEHAVIOR = createMap();
   CauldronBehavior FILL_WITH_CHEESE = (state, world, pos, player, hand, stack) -> fillCauldron(
       world,
       pos,
@@ -32,34 +35,34 @@ public interface NSCauldronBehavior {
   );
 
   static void registerBehavior() {
-    MILK_CAULDRON_BEHAVIOR.map().put(
-        Items.BUCKET,
-        (state, world, pos, player, hand, stack) -> emptyCauldron(state,
-            world,
-            pos,
-            player,
-            hand,
-            stack,
-            new ItemStack(Items.MILK_BUCKET),
-            (statex) -> true,
-            SoundEvents.ENTITY_COW_MILK
-        )
+    MILK_CAULDRON_BEHAVIOR.put(
+            Items.BUCKET,
+            (state, world, pos, player, hand, stack) -> emptyCauldron(state,
+                    world,
+                    pos,
+                    player,
+                    hand,
+                    stack,
+                    new ItemStack(Items.MILK_BUCKET),
+                    (statex) -> {return true;},
+                    SoundEvents.ENTITY_COW_MILK
+            )
     );
-    registerBucketBehavior(MILK_CAULDRON_BEHAVIOR.map());
-    CHEESE_CAULDRON_BEHAVIOR.map().put(
-        Items.BUCKET,
-        (state, world, pos, player, hand, stack) -> emptyCauldron(state,
-            world,
-            pos,
-            player,
-            hand,
-            stack,
-            new ItemStack(NSMiscBlocks.CHEESE_BUCKET),
-            (statex) -> true,
-            SoundEvents.ITEM_BUCKET_FILL
-        )
+    registerBucketBehavior(MILK_CAULDRON_BEHAVIOR);
+    CHEESE_CAULDRON_BEHAVIOR.put(
+            Items.BUCKET,
+            (state, world, pos, player, hand, stack) -> emptyCauldron(state,
+                    world,
+                    pos,
+                    player,
+                    hand,
+                    stack,
+                    new ItemStack(NSMiscBlocks.CHEESE_BUCKET),
+                    (statex) -> { return true;},
+                    SoundEvents.ITEM_BUCKET_FILL
+            )
     );
-    registerBucketBehavior(CHEESE_CAULDRON_BEHAVIOR.map());
+    registerBucketBehavior(CHEESE_CAULDRON_BEHAVIOR);
   }
 
 

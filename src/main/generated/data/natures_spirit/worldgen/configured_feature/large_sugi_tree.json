@@ -12,13 +12,17 @@
       "type": "natures_spirit:sugi_foliage_placer",
       "offset": {
         "type": "minecraft:uniform",
-        "max_inclusive": 0,
-        "min_inclusive": 0
+        "value": {
+          "max_inclusive": 0,
+          "min_inclusive": 0
+        }
       },
       "radius": {
         "type": "minecraft:uniform",
-        "max_inclusive": 1,
-        "min_inclusive": 1
+        "value": {
+          "max_inclusive": 1,
+          "min_inclusive": 1
+        }
       }
     },
     "foliage_provider": {

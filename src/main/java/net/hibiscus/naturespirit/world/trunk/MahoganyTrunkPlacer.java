@@ -1,6 +1,7 @@
 package net.hibiscus.naturespirit.world.trunk;
 
 import com.google.common.collect.Lists;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
@@ -20,7 +21,7 @@ import java.util.function.BiConsumer;
 
 public class MahoganyTrunkPlacer extends TrunkPlacer {
 
-  public static final MapCodec<MahoganyTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> fillTrunkPlacerFields(instance).apply(instance, MahoganyTrunkPlacer::new));
+  public static final Codec<MahoganyTrunkPlacer> CODEC = RecordCodecBuilder.create((instance) -> fillTrunkPlacerFields(instance).apply(instance, MahoganyTrunkPlacer::new));
 
   public MahoganyTrunkPlacer(int i, int j, int k) {
     super(i, j, k);

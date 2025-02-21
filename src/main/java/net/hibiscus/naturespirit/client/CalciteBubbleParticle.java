@@ -10,7 +10,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.SimpleParticleType;
+import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
@@ -67,7 +67,7 @@ public class CalciteBubbleParticle extends SpriteBillboardParticle {
 
 
   @Environment(EnvType.CLIENT)
-  public static class BubbleFactory implements ParticleFactory<SimpleParticleType> {
+  public static class BubbleFactory implements ParticleFactory<DefaultParticleType> {
 
     private final SpriteProvider spriteProvider;
 
@@ -76,7 +76,7 @@ public class CalciteBubbleParticle extends SpriteBillboardParticle {
     }
 
     @Override
-    public Particle createParticle(SimpleParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
+    public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
       return new CalciteBubbleParticle(clientWorld, d, e, f, g, h, i, this.spriteProvider);
     }
   }

@@ -815,17 +815,17 @@ public class NSConfiguredFeatures {
                 new SimpleBlockFeatureConfig(new NoiseBlockStateProvider(2445L,
                     new DoublePerlinNoiseSampler.NoiseParameters(0, 1.0D),
                     0.030833334F,
-                    List.of(Blocks.SHORT_GRASS.getDefaultState(),
+                    List.of(Blocks.GRASS.getDefaultState(),
                         Blocks.TALL_GRASS.getDefaultState(),
                         Blocks.POPPY.getDefaultState(),
                         NSMiscBlocks.CARNATION.getFlowerBlock().getDefaultState(),
                         Blocks.POPPY.getDefaultState(),
-                        Blocks.SHORT_GRASS.getDefaultState(),
+                        Blocks.GRASS.getDefaultState(),
                         Blocks.POPPY.getDefaultState(),
                         NSMiscBlocks.CARNATION.getFlowerBlock().getDefaultState(),
                         Blocks.POPPY.getDefaultState(),
                         Blocks.TALL_GRASS.getDefaultState(),
-                        Blocks.SHORT_GRASS.getDefaultState()
+                        Blocks.GRASS.getDefaultState()
                     )
                 ))
             )
@@ -929,7 +929,7 @@ public class NSConfiguredFeatures {
   }
 
   public static RegistryKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-    return RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(NatureSpirit.MOD_ID, name));
+    return RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, new Identifier(NatureSpirit.MOD_ID, name));
   }
 }
 

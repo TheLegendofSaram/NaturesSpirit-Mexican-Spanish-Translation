@@ -25,7 +25,7 @@ import java.util.function.BiConsumer;
 
 public class WisteriaTrunkPlacer extends TrunkPlacer {
 
-  public static final MapCodec<WisteriaTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<WisteriaTrunkPlacer> CODEC = RecordCodecBuilder.create((instance) -> {
     return fillTrunkPlacerFields(instance).and(instance.group(IntProvider.POSITIVE_CODEC.fieldOf("extra_branch_steps").forGetter((WisteriaTrunkPlacer) -> {
       return WisteriaTrunkPlacer.extraBranchSteps;
     }), Codec.floatRange(0.0F, 1.0F).fieldOf("place_branch_per_log_probability").forGetter((WisteriaTrunkPlacer) -> {

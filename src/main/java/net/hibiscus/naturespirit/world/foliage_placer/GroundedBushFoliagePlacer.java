@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 
 public class GroundedBushFoliagePlacer extends FoliagePlacer {
 
-  public static final MapCodec<GroundedBushFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<GroundedBushFoliagePlacer> CODEC = RecordCodecBuilder.create((instance) -> {
     return fillFoliagePlacerFields(instance).and(instance.group(IntProvider.createValidatingCodec(1, 512).fieldOf("foliage_height").forGetter((placer) -> {
       return placer.foliageHeight;
     }), Codec.intRange(0, 256).fieldOf("leaf_placement_attempts").forGetter((placer) -> {

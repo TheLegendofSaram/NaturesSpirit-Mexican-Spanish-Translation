@@ -19,7 +19,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
-public class SedgeGrassBlock extends ShortPlantBlock implements Waterloggable {
+public class SedgeGrassBlock extends FernBlock implements Waterloggable {
 
   public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
   protected static final VoxelShape SHAPE = Block.createCuboidShape(2D, 0D, 2D, 14D, 16D, 14D);

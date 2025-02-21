@@ -2,7 +2,6 @@ package net.hibiscus.naturespirit.registration.sets;
 
 import com.google.common.collect.ImmutableList;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityType;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
@@ -15,11 +14,13 @@ import net.hibiscus.naturespirit.blocks.*;
 import net.hibiscus.naturespirit.datagen.NSConfiguredFeatures;
 import net.hibiscus.naturespirit.registration.NSBoatTypes;
 import net.hibiscus.naturespirit.registration.NSParticleTypes;
+import net.hibiscus.naturespirit.world.tree.*;
 import net.minecraft.block.*;
 import net.minecraft.block.AbstractBlock.Settings;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.enums.NoteBlockInstrument;
+import net.minecraft.block.enums.Instrument;
 import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.*;
 import net.minecraft.particle.ParticleEffect;
@@ -122,10 +123,7 @@ public class WoodSet {
   private TagKey<Item> itemLogsTag;
   private TagKey<Block> blockLogsTag;
   private final Supplier<BoatEntity.Type> boatTypeSupplier;
-  private SaplingGenerator saplingGenerator;
-  private final Optional<RegistryKey<ConfiguredFeature<?, ?>>> configuredFeature;
-  private final Optional<RegistryKey<ConfiguredFeature<?, ?>>> configuredFeature2;
-  private boolean hasLargeTree;
+  private final SaplingGenerator saplingGenerator;
   private final boolean hasMosaic;
   private final List<Block> leavesList = new ArrayList<>();
   private final List<Block> saplingList = new ArrayList<>();
@@ -158,7 +156,6 @@ public class WoodSet {
       ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.addAfter(leavesBefore, leaves));
 
       if (this.hasDefaultSapling()) {
-        saplingGenerator = new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), configuredFeature2, configuredFeature, Optional.empty());
         sapling = this.isSandy() ? createSandySapling(saplingGenerator) : createSapling(saplingGenerator);
         pottedSapling = createPottedSapling(sapling);
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.addAfter(saplingBefore, sapling.asItem()));
@@ -171,7 +168,6 @@ public class WoodSet {
       frostyLeaves = createLeaves("frosty_");
       leaves = createFrostableLeaves();
       ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.addAfter(leavesBefore, leaves, frostyLeaves));
-      saplingGenerator = new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), configuredFeature2, configuredFeature, Optional.empty());
       sapling = createSapling(saplingGenerator);
       pottedSapling = createPottedSapling(sapling);
       ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.addAfter(saplingBefore, sapling.asItem()));
@@ -187,7 +183,6 @@ public class WoodSet {
       leaves = createVinesLeavesBlock(vinesPlant, vines);
       ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.addAfter(leavesBefore, leaves.asItem()));
 
-      saplingGenerator = new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), configuredFeature2, configuredFeature, Optional.empty());
       sapling = createSapling(saplingGenerator);
       pottedSapling = createPottedSapling(sapling);
       ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.addAfter(saplingBefore, sapling.asItem()));
@@ -212,14 +207,10 @@ public class WoodSet {
       partBlueLeaves = createVinesLeavesBlock("part_blue_", blueVinesPlant, blueVines);
       partPinkLeaves = createVinesLeavesBlock("part_pink_", pinkVinesPlant, pinkVines);
       partPurpleLeaves = createVinesLeavesBlock("part_purple_", purpleVinesPlant, purpleVines);
-      whiteSapling = createSapling("white_",
-          new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.WHITE_WISTERIA_TREE), Optional.empty()));
-      blueSapling = createSapling("blue_",
-          new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.BLUE_WISTERIA_TREE), Optional.empty()));
-      pinkSapling = createSapling("pink_",
-          new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.PINK_WISTERIA_TREE), Optional.empty()));
-      purpleSapling = createSapling("purple_",
-          new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.PURPLE_WISTERIA_TREE), Optional.empty()));
+      whiteSapling = createSapling("white_", new WhiteWisteriaSaplingGenerator());
+      blueSapling = createSapling("blue_", new BlueWisteriaSaplingGenerator());
+      pinkSapling = createSapling("pink_", new PinkWisteriaSaplingGenerator());
+      purpleSapling = createSapling("purple_", new PurpleWisteriaSaplingGenerator());
       pottedWhiteSapling = createPottedSapling("white_", whiteSapling);
       pottedBlueSapling = createPottedSapling("blue_", blueSapling);
       pottedPinkSapling = createPottedSapling("pink_", pinkSapling);
@@ -253,12 +244,9 @@ public class WoodSet {
       redLeaves = createParticleLeaves("red_", NSParticleTypes.RED_MAPLE_LEAVES_PARTICLE, 100);
       orangeLeaves = createParticleLeaves("orange_", NSParticleTypes.ORANGE_MAPLE_LEAVES_PARTICLE, 100);
       yellowLeaves = createParticleLeaves("yellow_", NSParticleTypes.YELLOW_MAPLE_LEAVES_PARTICLE, 100);
-      redSapling = createSapling("red_",
-          new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.RED_MAPLE_TREE), Optional.empty()));
-      orangeSapling = createSapling("orange_",
-          new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.ORANGE_MAPLE_TREE), Optional.empty()));
-      yellowSapling = createSapling("yellow_",
-          new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), Optional.empty(), Optional.of(NSConfiguredFeatures.YELLOW_MAPLE_TREE), Optional.empty()));
+      redSapling = createSapling("red_", new RedMapleSaplingGenerator());
+      orangeSapling = createSapling("orange_", new OrangeMapleSaplingGenerator());
+      yellowSapling = createSapling("yellow_", new YellowMapleSaplingGenerator());
       pottedRedSapling = createPottedSapling("red_", redSapling);
       pottedOrangeSapling = createPottedSapling("orange_", orangeSapling);
       pottedYellowSapling = createPottedSapling("yellow_", yellowSapling);
@@ -278,19 +266,8 @@ public class WoodSet {
       });
     }
     if (woodPreset == WoodPreset.ASPEN) {
-      leaves = createLeaves();
       yellowLeaves = createLeaves("yellow_");
-      sapling = createSapling(
-          new SaplingGenerator(NatureSpirit.MOD_ID + "_" + this.getName(), .5f, Optional.empty(), Optional.empty(), Optional.of(NSConfiguredFeatures.ASPEN_TREE),
-              Optional.of(NSConfiguredFeatures.YELLOW_ASPEN_TREE), Optional.empty(), Optional.empty()));
-      pottedSapling = createPottedSapling(sapling);
       ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.addAfter(leavesBefore, yellowLeaves.asItem()));
-      ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.addAfter(leavesBefore, leaves.asItem()));
-      ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> entries.addAfter(saplingBefore, sapling.asItem()));
-      SaplingHashMap.put(getName(), new Block[]{sapling, pottedSapling});
-      TradeOfferHelper.registerWanderingTraderOffers(1, factories -> {
-        factories.add(new TradeOffers.SellItemFactory(sapling, 5, 1, 8, 1));
-      });
     }
     if (this.hasMosaic()) {
       mosaic = createMosaic();
@@ -319,14 +296,6 @@ public class WoodSet {
     signItem = createSignItem();
     hangingSignItem = createHangingSignItem();
 
-    FabricBlockEntityType signEntity = BlockEntityType.SIGN;
-    signEntity.addSupportedBlock(sign);
-    signEntity.addSupportedBlock(wallSign);
-
-    FabricBlockEntityType hangingSignEntity = BlockEntityType.HANGING_SIGN;
-    hangingSignEntity.addSupportedBlock(hangingSign);
-    hangingSignEntity.addSupportedBlock(hangingWallSign);
-
     BoatEntity.Type boatType = boatTypeSupplier.get();
     String boatTypeName = boatType.getName().replace("natures_spirit_", "");
     boatItem = createItem(boatTypeName + "_boat",
@@ -352,26 +321,26 @@ public class WoodSet {
     FuelRegistry.INSTANCE.add(fence, 300);
     FuelRegistry.INSTANCE.add(fenceGate, 300);
 
-    blockLogsTag = TagKey.of(RegistryKeys.BLOCK, Identifier.of(getModID(), getName() + "_logs"));
-    itemLogsTag = TagKey.of(RegistryKeys.ITEM, Identifier.of(getModID(), getName() + "_logs"));
+    blockLogsTag = TagKey.of(RegistryKeys.BLOCK, new Identifier(getModID(), getName() + "_logs"));
+    itemLogsTag = TagKey.of(RegistryKeys.ITEM, new Identifier(getModID(), getName() + "_logs"));
     addToBuildingTab(buttonBefore, logBefore, signBefore, boatBefore, this);
   }
 
   public WoodSet(
-      Identifier name,
-      MapColor sideColor,
-      MapColor topColor,
-      ItemConvertible leavesBefore,
-      ItemConvertible logBefore,
-      ItemConvertible signBefore,
-      ItemConvertible boatBefore,
-      ItemConvertible buttonBefore,
-      ItemConvertible saplingBefore,
-      Supplier<BoatEntity.Type> boatType,
-      WoodPreset woodPreset,
-      boolean hasMosaic,
-      RegistryKey<ConfiguredFeature<?, ?>> configuredFeature
-  ) {
+          Identifier name,
+          MapColor sideColor,
+          MapColor topColor,
+          ItemConvertible leavesBefore,
+          ItemConvertible logBefore,
+          ItemConvertible signBefore,
+          ItemConvertible boatBefore,
+          ItemConvertible buttonBefore,
+          ItemConvertible saplingBefore,
+          Supplier<BoatEntity.Type> boatType,
+          WoodPreset woodPreset,
+          boolean hasMosaic,
+          SaplingGenerator saplingGenerator
+          ) {
     this.woodPreset = woodPreset;
     this.name = name;
     this.sideColor = sideColor;
@@ -383,44 +352,8 @@ public class WoodSet {
     this.buttonBefore = buttonBefore;
     this.saplingBefore = saplingBefore;
     this.boatTypeSupplier = boatType;
-    this.hasMosaic = hasMosaic;
-    this.configuredFeature = Optional.of(configuredFeature);
-    this.configuredFeature2 = Optional.empty();
-    registerWood();
-    WoodHashMap.put(this.getName(), this);
-  }
-
-  public WoodSet(
-      Identifier name,
-      MapColor sideColor,
-      MapColor topColor,
-      ItemConvertible leavesBefore,
-      ItemConvertible logBefore,
-      ItemConvertible signBefore,
-      ItemConvertible boatBefore,
-      ItemConvertible buttonBefore,
-      ItemConvertible saplingBefore,
-      Supplier<BoatEntity.Type> boatType,
-      WoodPreset woodPreset,
-      boolean hasMosaic,
-      Optional<RegistryKey<ConfiguredFeature<?, ?>>> configuredFeature,
-      Optional<RegistryKey<ConfiguredFeature<?, ?>>> configuredFeature2
-  ) {
-    this.woodPreset = woodPreset;
-    this.name = name;
-    this.sideColor = sideColor;
-    this.topColor = topColor;
-    this.leavesBefore = leavesBefore;
-    this.logBefore = logBefore;
-    this.signBefore = signBefore;
-    this.boatBefore = boatBefore;
-    this.buttonBefore = buttonBefore;
-    this.saplingBefore = saplingBefore;
-    this.boatTypeSupplier = boatType;
-    this.hasMosaic = hasMosaic;
-    this.configuredFeature = configuredFeature;
-    this.configuredFeature2 = configuredFeature2;
-    this.hasLargeTree = true;
+      this.saplingGenerator = saplingGenerator;
+      this.hasMosaic = hasMosaic;
     registerWood();
     WoodHashMap.put(this.getName(), this);
   }
@@ -836,21 +769,21 @@ public class WoodSet {
 
   private Block createJoshuaLog() {
     return createBlockWithItem(getLogName(), new BranchingTrunkBlock(
-        AbstractBlock.Settings.create().burnable().mapColor(MapColor.GRAY).instrument(NoteBlockInstrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
+        AbstractBlock.Settings.create().burnable().mapColor(MapColor.GRAY).instrument(Instrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
   }
 
   private Block createStrippedJoshuaLog() {
     return createBlockWithItem("stripped_" + getLogName(), new BranchingTrunkBlock(
-        AbstractBlock.Settings.create().burnable().mapColor(MapColor.GRAY).instrument(NoteBlockInstrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
+        AbstractBlock.Settings.create().burnable().mapColor(MapColor.GRAY).instrument(Instrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
   }
 
   private Block createWood() {
     return createBlockWithItem(getWoodName(), new PillarBlock(
-        Settings.create().mapColor(sideColor).instrument(NoteBlockInstrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()));
+        Settings.create().mapColor(sideColor).instrument(Instrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()));
   }
 
   private Block createStrippedWood() {
-    return createBlockWithItem("stripped_" + getWoodName(), new PillarBlock(Settings.create().mapColor(topColor).instrument(NoteBlockInstrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()));
+    return createBlockWithItem("stripped_" + getWoodName(), new PillarBlock(Settings.create().mapColor(topColor).instrument(Instrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()));
   }
 
   private Block createLeaves() {
@@ -1036,46 +969,46 @@ public class WoodSet {
   }
 
   private Block createFenceGate() {
-    return createBlockWithItem(getName() + "_fence_gate", new FenceGateBlock(getWoodType(),
-        AbstractBlock.Settings.create().mapColor(getBase().getDefaultMapColor()).solid().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).burnable()));
+    return createBlockWithItem(getName() + "_fence_gate", new FenceGateBlock(
+        AbstractBlock.Settings.create().mapColor(getBase().getDefaultMapColor()).solid().instrument(Instrument.BASS).strength(2.0F, 3.0F).burnable(), getWoodType()));
   }
 
   private Block createPressurePlate() {
-    return createBlockWithItem(getName() + "_pressure_plate", new PressurePlateBlock(getBlockSetType(),
-        AbstractBlock.Settings.create().mapColor(this.getBase().getDefaultMapColor()).solid().instrument(NoteBlockInstrument.BASS).noCollision().strength(0.5F).burnable()
-            .pistonBehavior(PistonBehavior.DESTROY)));
+    return createBlockWithItem(getName() + "_pressure_plate", new PressurePlateBlock( PressurePlateBlock.ActivationRule.EVERYTHING,
+        AbstractBlock.Settings.create().mapColor(this.getBase().getDefaultMapColor()).solid().instrument(Instrument.BASS).noCollision().strength(0.5F).burnable()
+            .pistonBehavior(PistonBehavior.DESTROY), getBlockSetType()));
   }
 
   private Block createButton() {
     return createBlockWithItem(getName() + "_button",
-        new ButtonBlock(getBlockSetType(), 30, AbstractBlock.Settings.create().noCollision().strength(0.5F).pistonBehavior(PistonBehavior.DESTROY)));
+        new ButtonBlock(AbstractBlock.Settings.create().noCollision().strength(0.5F).pistonBehavior(PistonBehavior.DESTROY), getBlockSetType(), 30, true));
   }
 
   private Block createDoor() {
     return createBlockWithItem(getName() + "_door",
-        new DoorBlock(getBlockSetType(), AbstractBlock.Settings.copy(getBase()).sounds(getBlockSetType().soundType()).nonOpaque().mapColor(getTopColor())));
+        new DoorBlock(AbstractBlock.Settings.copy(getBase()).sounds(getBlockSetType().soundType()).nonOpaque().mapColor(getTopColor()), getBlockSetType()));
   }
 
   private Block createTrapDoor() {
     return createBlockWithItem(getName() + "_trapdoor",
-        new TrapdoorBlock(getBlockSetType(), AbstractBlock.Settings.copy(getBase()).sounds(getBlockSetType().soundType()).nonOpaque().mapColor(getTopColor())));
+        new TrapdoorBlock(AbstractBlock.Settings.copy(getBase()).sounds(getBlockSetType().soundType()).nonOpaque().mapColor(getTopColor()), getBlockSetType()));
   }
 
   private Block createSign() {
-    return registerBlockWithoutTab(getName() + "_sign", new SignBlock(woodType, AbstractBlock.Settings.copy(getSignBase()).mapColor(this.getTopColor())));
+    return registerBlockWithoutTab(getName() + "_sign", new SignBlock(AbstractBlock.Settings.copy(getSignBase()).mapColor(this.getTopColor()), getWoodType()));
   }
 
   private Block createWallSign() {
-    return registerBlockWithoutTab(getName() + "_wall_sign", new WallSignBlock(woodType, AbstractBlock.Settings.copy(getSignBase()).mapColor(this.getTopColor()).dropsLike(sign)));
+    return registerBlockWithoutTab(getName() + "_wall_sign", new WallSignBlock(AbstractBlock.Settings.copy(getSignBase()).mapColor(this.getTopColor()).dropsLike(sign), getWoodType()));
   }
 
   private Block createHangingSign() {
-    return registerBlockWithoutTab(getName() + "_hanging_sign", new HangingSignBlock(woodType, AbstractBlock.Settings.copy(getHangingSignBase()).mapColor(this.getTopColor())));
+    return registerBlockWithoutTab(getName() + "_hanging_sign", new HangingSignBlock(AbstractBlock.Settings.copy(getHangingSignBase()).mapColor(this.getTopColor()), getWoodType()));
   }
 
   private Block createWallHangingSign() {
     return registerBlockWithoutTab(getName() + "_wall_hanging_sign",
-        new WallHangingSignBlock(woodType, AbstractBlock.Settings.copy(getHangingSignBase()).mapColor(this.getTopColor()).dropsLike(hangingSign)));
+        new WallHangingSignBlock(AbstractBlock.Settings.copy(getHangingSignBase()).mapColor(this.getTopColor()).dropsLike(hangingSign), getWoodType()));
   }
 
   public Block createSapling(SaplingGenerator saplingGenerator) {
@@ -1146,7 +1079,7 @@ public class WoodSet {
 
   public boolean hasDefaultLeaves() {
     return woodPreset == WoodPreset.DEFAULT || woodPreset == WoodPreset.WISTERIA || woodPreset == WoodPreset.FANCY || woodPreset == WoodPreset.JOSHUA
-        || woodPreset == WoodPreset.NO_SAPLING || woodPreset == WoodPreset.SANDY;
+        || woodPreset == WoodPreset.NO_SAPLING || woodPreset == WoodPreset.SANDY || woodPreset == WoodPreset.ASPEN;
   }
 
   public boolean hasDefaultSapling() {

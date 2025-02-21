@@ -24,8 +24,8 @@ import static net.hibiscus.naturespirit.registration.NSMiscBlocks.*;
 
 class NSLangGenerator extends FabricLanguageProvider {
 
-  protected NSLangGenerator(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-    super(dataOutput, registryLookup);
+  protected NSLangGenerator(FabricDataOutput dataOutput) {
+    super(dataOutput);
   }
 
   public static String capitalizeString(String string) {
@@ -50,11 +50,6 @@ class NSLangGenerator extends FabricLanguageProvider {
   private void generateItemTranslations(Item item, TranslationBuilder translationBuilder) {
     String temp = capitalizeString(Registries.ITEM.getId(item).getPath().replace("_", " "));
     translationBuilder.add(item, temp);
-  }
-
-  private void generateItemTagTranslations(TagKey<Item> itemTag, TranslationBuilder translationBuilder) {
-    String temp = capitalizeString(itemTag.id().getPath().replace("_", " "));
-    translationBuilder.add(itemTag, temp);
   }
 
   private void generateWoodTranslations(HashMap<String, WoodSet> woods, TranslationBuilder translationBuilder) {
@@ -103,7 +98,7 @@ class NSLangGenerator extends FabricLanguageProvider {
   }
 
   @Override
-  public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
+  public void generateTranslations(TranslationBuilder translationBuilder) {
     generateBiomeTranslations(translationBuilder);
     generateWoodTranslations(NSRegistryHelper.WoodHashMap, translationBuilder);
     generateStoneTranslations(NSRegistryHelper.StoneHashMap, translationBuilder);
@@ -249,14 +244,14 @@ class NSLangGenerator extends FabricLanguageProvider {
     generateBlockTranslations(MILK_CAULDRON, translationBuilder);
     translationBuilder.add(CHEESE_BUCKET, "Cheese Bucket");
     translationBuilder.add(CHEESE_ARROW, "Cheese Arrow");
-    translationBuilder.add("block.natures_spirit.pizza.cooked_chicken", "With Cooked Chicken");
-    translationBuilder.add("block.natures_spirit.pizza.olives", "With Olives");
-    translationBuilder.add("block.natures_spirit.pizza.brown_mushroom", "With Mushrooms");
-    translationBuilder.add("block.natures_spirit.pizza.beetroot", "With Beetroots");
-    translationBuilder.add("block.natures_spirit.pizza.carrot", "With Carrots");
-    translationBuilder.add("block.natures_spirit.pizza.cooked_cod", "With Cooked Cod");
-    translationBuilder.add("block.natures_spirit.pizza.cooked_porkchop", "With Cooked Porkchop");
-    translationBuilder.add("block.natures_spirit.pizza.cooked_rabbit", "With Cooked Rabbit");
+    translationBuilder.add("block.natures_spirit.pizza.minecraft.cooked_chicken", "With Cooked Chicken");
+    translationBuilder.add("block.natures_spirit.pizza.natures_spirit.olives", "With Olives");
+    translationBuilder.add("block.natures_spirit.pizza.minecraft.brown_mushroom", "With Mushrooms");
+    translationBuilder.add("block.natures_spirit.pizza.minecraft.beetroot", "With Beetroots");
+    translationBuilder.add("block.natures_spirit.pizza.minecraft.carrot", "With Carrots");
+    translationBuilder.add("block.natures_spirit.pizza.minecraft.cooked_cod", "With Cooked Cod");
+    translationBuilder.add("block.natures_spirit.pizza.minecraft.cooked_porkchop", "With Cooked Porkchop");
+    translationBuilder.add("block.natures_spirit.pizza.minecraft.cooked_rabbit", "With Cooked Rabbit");
     translationBuilder.add(NSMiscBlocks.HALF_PIZZA, "Half of a Pizza");
     translationBuilder.add(NSMiscBlocks.THREE_QUARTERS_PIZZA, "Three Quarters of a Pizza");
     translationBuilder.add(NSMiscBlocks.QUARTER_PIZZA, "Quarter of a Pizza");
@@ -283,26 +278,6 @@ class NSLangGenerator extends FabricLanguageProvider {
     translationBuilder.add("painting.natures_spirit.aspen.author", "Aeramisu");
     translationBuilder.add("painting.natures_spirit.sandy_trees.title", "Lost");
     translationBuilder.add("painting.natures_spirit.sandy_trees.author", "Aeramisu");
-    generateItemTagTranslations(NSTags.Items.PIZZA_TOPPINGS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.DISABLED_PIZZA_TOPPINGS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.CHEESE_MAKER, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.EVERGREEN_LEAVES, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.XERIC_LEAVES, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.COCONUT_ITEMS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.SUCCULENTS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.STRIPPED_LOGS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.ALLUAUDIA_BLOCKS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.KAOLIN, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.KAOLIN_STAIRS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.KAOLIN_SLABS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.KAOLIN_BRICKS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.KAOLIN_BRICK_STAIRS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.KAOLIN_BRICK_SLABS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.CHALK, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.CHALK_STAIRS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.CHALK_SLABS, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.COCONUT_HALVES, translationBuilder);
-    generateItemTagTranslations(NSTags.Items.OLIVES, translationBuilder);
 
     generateArchExTranslations("kaolin", translationBuilder);
     generateArchExTranslations("kaolin_bricks", translationBuilder);

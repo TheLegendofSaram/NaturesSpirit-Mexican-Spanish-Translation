@@ -6,6 +6,7 @@
 package net.hibiscus.naturespirit.world.trunk;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hibiscus.naturespirit.registration.NSWorldGen;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class BushTrunkPlacer extends TrunkPlacer {
-  public static final MapCodec<BushTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
+  public static final Codec<BushTrunkPlacer> CODEC = RecordCodecBuilder.create((instance) -> {
     return fillTrunkPlacerFields(instance).apply(instance, BushTrunkPlacer::new);
   });
 

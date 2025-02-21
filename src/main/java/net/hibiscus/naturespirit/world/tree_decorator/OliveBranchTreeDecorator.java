@@ -15,9 +15,9 @@ import java.util.List;
 
 public class OliveBranchTreeDecorator extends TreeDecorator {
 
-  public static final MapCodec<OliveBranchTreeDecorator> CODEC = Codec.floatRange(0.0F, 1.0F).fieldOf("probability").xmap(OliveBranchTreeDecorator::new, (decorator) -> {
+  public static final Codec<OliveBranchTreeDecorator> CODEC = Codec.floatRange(0.0F, 1.0F).fieldOf("probability").xmap(OliveBranchTreeDecorator::new, (decorator) -> {
     return decorator.probability;
-  });
+  }).codec();
   private final float probability;
 
   public OliveBranchTreeDecorator(float probability) {

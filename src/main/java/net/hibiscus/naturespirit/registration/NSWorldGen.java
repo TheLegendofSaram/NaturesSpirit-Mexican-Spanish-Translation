@@ -1,5 +1,6 @@
 package net.hibiscus.naturespirit.registration;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.world.carver.ReplaceableCaveCarver;
 import net.hibiscus.naturespirit.world.carver.ReplaceableCaveCarverConfig;
@@ -77,81 +78,81 @@ public class NSWorldGen {
   public static final Carver<ReplaceableRavineCarverConfig> REPLACEABLE_RAVINE_CARVER = registerCaveCarver("replaceable_canyon",
       new ReplaceableRavineCarver(ReplaceableRavineCarverConfig.RAVINE_CODEC));
 
-  public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> SUGI_PILLAR = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, Identifier.of(MOD_ID, "sugi_pillar"));
+  public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> SUGI_PILLAR = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, new Identifier(MOD_ID, "sugi_pillar"));
   public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> SUGI_PILLAR_ROOF = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS,
-      Identifier.of(MOD_ID, "sugi_pillar_roof"));
-  public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> SUGI_SURFACE = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, Identifier.of(MOD_ID, "sugi_surface"));
+      new Identifier(MOD_ID, "sugi_pillar_roof"));
+  public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> SUGI_SURFACE = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, new Identifier(MOD_ID, "sugi_surface"));
 
   public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> STRATIFIED_DESERT_PILLAR = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS,
-      Identifier.of(MOD_ID, "stratified_desert_pillar"));
+      new Identifier(MOD_ID, "stratified_desert_pillar"));
   public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> STRATIFIED_DESERT_PILLAR_ROOF = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS,
-      Identifier.of(MOD_ID, "stratified_desert_pillar_roof"));
+      new Identifier(MOD_ID, "stratified_desert_pillar_roof"));
   public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> STRATIFIED_DESERT_SURFACE = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS,
-      Identifier.of(MOD_ID, "stratified_desert_surface"));
+      new Identifier(MOD_ID, "stratified_desert_surface"));
 
   public static final Feature<DeltaFeatureConfig> HIBISCUS_DELTA_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "water_delta_feature"),
+      new Identifier(MOD_ID, "water_delta_feature"),
       new NSDeltaFeature(DeltaFeatureConfig.CODEC)
   );
   public static final Feature<OreFeatureConfig> HIBISCUS_PUMPKIN_PATCH_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "pumpkin_patch_feature"),
+      new Identifier(MOD_ID, "pumpkin_patch_feature"),
       new PumpkinPatchFeature(OreFeatureConfig.CODEC)
   );
   public static final Feature<BlockPileFeatureConfig> HIBISCUS_LARGE_PUMPKIN_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "large_pumpkin_feature"),
+      new Identifier(MOD_ID, "large_pumpkin_feature"),
       new LargePumpkinFeature(BlockPileFeatureConfig.CODEC)
   );
   public static final Feature<TurnipRootFeatureConfig> HIBISCUS_TURNIP_ROOT_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "turnip_root_feature"),
+      new Identifier(MOD_ID, "turnip_root_feature"),
       new TurnipRootFeature(TurnipRootFeatureConfig.CODEC)
   );
   public static final Feature<DefaultFeatureConfig> JOSHUA_TREE_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "joshua_tree_feature"),
+      new Identifier(MOD_ID, "joshua_tree_feature"),
       new JoshuaTreeFeature(DefaultFeatureConfig.CODEC)
   );
   public static final Feature<DefaultFeatureConfig> ALLUAUDIA_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "alluaudia_feature"),
+      new Identifier(MOD_ID, "alluaudia_feature"),
       new AlluaudiaFeature(DefaultFeatureConfig.CODEC)
   );
   public static final Feature<HugeMushroomFeatureConfig> HUGE_SHIITAKE_MUSHROOM_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "huge_shiitake_mushroom_feature"),
+      new Identifier(MOD_ID, "huge_shiitake_mushroom_feature"),
       new HugeShiitakeMushroomFeature(HugeMushroomFeatureConfig.CODEC)
   );
   public static final Feature<net.hibiscus.naturespirit.world.feature.HugeMushroomFeatureConfig> HUGE_RED_MUSHROOM_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "huge_red_mushroom_feature"),
+      new Identifier(MOD_ID, "huge_red_mushroom_feature"),
       new HugeRedMushroomFeature(net.hibiscus.naturespirit.world.feature.HugeMushroomFeatureConfig.CODEC)
   );
   public static final Feature<net.hibiscus.naturespirit.world.feature.HugeMushroomFeatureConfig> HUGE_BROWN_MUSHROOM_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "huge_brown_mushroom_feature"),
+      new Identifier(MOD_ID, "huge_brown_mushroom_feature"),
       new HugeBrownMushroomFeature(net.hibiscus.naturespirit.world.feature.HugeMushroomFeatureConfig.CODEC)
   );
   public static final Feature<DefaultFeatureConfig> POLYPORE_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "polypore_feature"),
+      new Identifier(MOD_ID, "polypore_feature"),
       new PolyporeFeature(DefaultFeatureConfig.CODEC)
   );
   public static final Feature<DefaultFeatureConfig> LOTUS_PLANT_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "lotus_plant_feature"),
+      new Identifier(MOD_ID, "lotus_plant_feature"),
       new LotusPlantFeature(DefaultFeatureConfig.CODEC)
   );
   public static final Feature<RandomPatchFeatureConfig> LEVELED_RANDOM_PATCH_FEATURE = Registry.register(Registries.FEATURE,
-      Identifier.of(MOD_ID, "leveled_random_patch_feature"),
+      new Identifier(MOD_ID, "leveled_random_patch_feature"),
       new LeveledRandomPatch(RandomPatchFeatureConfig.CODEC)
   );
 
-  private static <P extends FoliagePlacer> FoliagePlacerType<P> registerFoliagePlacer(String id, MapCodec<P> codec) {
-    return (FoliagePlacerType) Registry.register(Registries.FOLIAGE_PLACER_TYPE, Identifier.of(MOD_ID, id), new FoliagePlacerType(codec));
+  private static <P extends FoliagePlacer> FoliagePlacerType<P> registerFoliagePlacer(String id, Codec<P> codec) {
+    return (FoliagePlacerType) Registry.register(Registries.FOLIAGE_PLACER_TYPE, new Identifier(MOD_ID, id), new FoliagePlacerType(codec));
   }
 
-  private static <P extends TrunkPlacer> TrunkPlacerType<P> registerTrunkPlacer(String id, MapCodec<P> codec) {
-    return (TrunkPlacerType) Registry.register(Registries.TRUNK_PLACER_TYPE, Identifier.of(MOD_ID, id), new TrunkPlacerType(codec));
+  private static <P extends TrunkPlacer> TrunkPlacerType<P> registerTrunkPlacer(String id, Codec<P> codec) {
+    return (TrunkPlacerType) Registry.register(Registries.TRUNK_PLACER_TYPE, new Identifier(MOD_ID, id), new TrunkPlacerType(codec));
   }
 
-  private static <P extends TreeDecorator> TreeDecoratorType<P> registerTreeDecorator(String id, MapCodec<P> codec) {
-    return (TreeDecoratorType) Registry.register(Registries.TREE_DECORATOR_TYPE, Identifier.of(MOD_ID, id), new TreeDecoratorType(codec));
+  private static <P extends TreeDecorator> TreeDecoratorType<P> registerTreeDecorator(String id, Codec<P> codec) {
+    return (TreeDecoratorType) Registry.register(Registries.TREE_DECORATOR_TYPE, new Identifier(MOD_ID, id), new TreeDecoratorType(codec));
   }
 
   private static <C extends CarverConfig, F extends Carver<C>> Carver<C> registerCaveCarver(String id, F carver) {
-    return Registry.register(Registries.CARVER, Identifier.of(MOD_ID, id), carver);
+    return Registry.register(Registries.CARVER, new Identifier(MOD_ID, id), carver);
   }
 
   public static void registerWorldGen() {

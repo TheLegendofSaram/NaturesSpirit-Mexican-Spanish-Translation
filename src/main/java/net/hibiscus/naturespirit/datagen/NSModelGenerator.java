@@ -74,14 +74,14 @@ class NSModelGenerator extends FabricModelProvider {
   }
 
   private static Model block(String parent, TextureKey... requiredTextureKeys) {
-    return new Model(Optional.of(Identifier.of("natures_spirit", "block/" + parent)), Optional.empty(), requiredTextureKeys);
+    return new Model(Optional.of(new Identifier("natures_spirit", "block/" + parent)), Optional.empty(), requiredTextureKeys);
   }
 
   private static Model block(String parent, String variant, TextureKey... requiredTextureKeys) {
-    return new Model(Optional.of(Identifier.of("natures_spirit", "block/" + parent)), Optional.of(variant), requiredTextureKeys);
+    return new Model(Optional.of(new Identifier("natures_spirit", "block/" + parent)), Optional.of(variant), requiredTextureKeys);
   }
   private static Model minecraftBlock(String parent, String variant, TextureKey... requiredTextureKeys) {
-    return new Model(Optional.of(Identifier.of("minecraft", "block/" + parent)), Optional.of(variant), requiredTextureKeys);
+    return new Model(Optional.of(new Identifier("minecraft", "block/" + parent)), Optional.of(variant), requiredTextureKeys);
   }
 
   public static Identifier getId(Block block) {

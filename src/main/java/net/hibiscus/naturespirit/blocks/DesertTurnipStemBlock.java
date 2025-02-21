@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSMiscBlocks;
 import net.hibiscus.naturespirit.registration.NSTags;
 import net.minecraft.block.*;
@@ -98,11 +97,6 @@ public class DesertTurnipStemBlock extends PlantBlock implements Fertilizable {
   }
 
   @Override
-  protected MapCodec<? extends PlantBlock> getCodec() {
-    return null;
-  }
-
-  @Override
   protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
     return floor.isOf(Blocks.FARMLAND) || floor.isIn(NSTags.Blocks.TURNIP_STEM_GROWS_ON);
   }
@@ -152,12 +146,12 @@ public class DesertTurnipStemBlock extends PlantBlock implements Fertilizable {
   }
 
   @Override
-  public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+  public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
     return new ItemStack(this.pickBlockItem.get());
   }
 
   @Override
-  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean bl) {
     return state.get(AGE) < MAX_AGE;
   }
 

@@ -12,13 +12,17 @@
     },
     "rim_size": {
       "type": "minecraft:uniform",
-        "max_inclusive": 1,
-        "min_inclusive": 0
+      "value": {
+        "min_inclusive": 0,
+        "max_inclusive": 1
+      }
     },
     "size": {
       "type": "minecraft:uniform",
-        "max_inclusive": 9,
-        "min_inclusive": 6
+      "value": {
+        "min_inclusive": 6,
+        "max_inclusive": 9
+      }
     }
   }
 }

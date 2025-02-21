@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.block.AbstractPlantBlock;
 import net.minecraft.block.AbstractPlantStemBlock;
 import net.minecraft.block.Block;
@@ -43,10 +42,5 @@ public class DownwardsVinePlantBlock extends AbstractPlantBlock {
           this.growthDirection
       ) || blockState.isIn(BlockTags.LEAVES);
     }
-  }
-
-  @Override
-  protected MapCodec<? extends AbstractPlantBlock> getCodec() {
-    return null;
   }
 }

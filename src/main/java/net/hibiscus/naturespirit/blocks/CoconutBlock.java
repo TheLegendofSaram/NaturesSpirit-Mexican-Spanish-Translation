@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSCriteria;
 import net.hibiscus.naturespirit.registration.NSWoods;
 import net.minecraft.block.*;
@@ -28,6 +27,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -55,11 +55,6 @@ public class CoconutBlock extends FallingBlock implements Fertilizable, Waterlog
   public CoconutBlock(Settings settings) {
     super(settings);
     this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.UP).with(WATERLOGGED, false).with(FILLED, true));
-  }
-
-  @Override
-  protected MapCodec<? extends FallingBlock> getCodec() {
-    return null;
   }
 
   @Override
@@ -97,15 +92,15 @@ public class CoconutBlock extends FallingBlock implements Fertilizable, Waterlog
   }
 
   @Override
-  public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-    ItemStack itemStack = player.getStackInHand(player.getActiveHand());
+  public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    ItemStack itemStack = player.getStackInHand(hand);
     boolean bl = state.get(FILLED);
     Item item = itemStack.getItem();
     if (itemStack.isOf(Items.BUCKET) && bl) {
       itemStack.decrement(1);
       world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_COW_MILK, SoundCategory.BLOCKS, 1.0F, 1.0F);
       if (itemStack.isEmpty()) {
-        player.setStackInHand(player.getActiveHand(), new ItemStack(Items.MILK_BUCKET));
+        player.setStackInHand(hand, new ItemStack(Items.MILK_BUCKET));
       } else if (!player.getInventory().insertStack(new ItemStack(Items.MILK_BUCKET))) {
         player.dropItem(new ItemStack(Items.MILK_BUCKET), false);
       }
@@ -116,7 +111,7 @@ public class CoconutBlock extends FallingBlock implements Fertilizable, Waterlog
     if (!world.isClient() && bl) {
       player.incrementStat(Stats.USED.getOrCreateStat(item));
     }
-    return super.onUse(state, world, pos, player, hit);
+    return super.onUse(state, world, pos, player, hand, hit);
 
   }
 
@@ -170,7 +165,7 @@ public class CoconutBlock extends FallingBlock implements Fertilizable, Waterlog
 
 
   @Override
-  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean bl) {
     return state.get(FACING) == Direction.UP;
   }
 

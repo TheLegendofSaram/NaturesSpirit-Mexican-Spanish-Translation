@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,11 +14,6 @@ public class DesertTurnipBlock extends FacingBlock {
   public DesertTurnipBlock(AbstractBlock.Settings settings) {
     super(settings);
     this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.UP));
-  }
-
-  @Override
-  protected MapCodec<? extends FacingBlock> getCodec() {
-    return null;
   }
 
   @Override

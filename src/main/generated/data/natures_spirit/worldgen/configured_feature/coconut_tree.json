@@ -47,8 +47,10 @@
       "height_rand_b": 3,
       "trunk_steps": {
         "type": "minecraft:uniform",
-        "max_inclusive": 3,
-        "min_inclusive": 1
+        "value": {
+          "max_inclusive": 3,
+          "min_inclusive": 1
+        }
       }
     },
     "trunk_provider": {

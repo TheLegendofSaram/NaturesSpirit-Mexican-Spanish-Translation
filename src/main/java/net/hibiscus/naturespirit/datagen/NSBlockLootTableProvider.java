@@ -2,7 +2,6 @@ package net.hibiscus.naturespirit.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-import net.hibiscus.naturespirit.blocks.AzollaBlock;
 import net.hibiscus.naturespirit.registration.NSColoredBlocks;
 import net.hibiscus.naturespirit.registration.NSMiscBlocks;
 import net.hibiscus.naturespirit.registration.NSRegistryHelper;
@@ -11,12 +10,12 @@ import net.hibiscus.naturespirit.registration.sets.FlowerSet;
 import net.hibiscus.naturespirit.registration.sets.StoneSet;
 import net.hibiscus.naturespirit.registration.sets.WoodSet;
 import net.minecraft.block.Block;
+import net.minecraft.block.FlowerbedBlock;
 import net.minecraft.block.TallPlantBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.data.server.loottable.BlockLootTableGenerator;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
@@ -29,13 +28,10 @@ import net.minecraft.loot.function.ApplyBonusLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
-import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.predicate.StatePredicate;
 import net.minecraft.registry.tag.ItemTags;
 
 import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.IntStream;
 
 import static net.hibiscus.naturespirit.registration.NSMiscBlocks.*;
@@ -46,8 +42,8 @@ class NSBlockLootTableProvider extends FabricBlockLootTableProvider {
 
   private final static float[] LEAVES_STICK_DROP_CHANCE = new float[]{0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F};
 
-  protected NSBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-    super(dataOutput, registryLookup);
+  protected NSBlockLootTableProvider(FabricDataOutput dataOutput) {
+    super(dataOutput);
   }
 
   private void addWoodTable(HashMap<String, WoodSet> woods) {
@@ -143,25 +139,23 @@ class NSBlockLootTableProvider extends FabricBlockLootTableProvider {
     }
   }
 
-  public final LootTable.Builder dropsWithSilkTouchOrShears2(ItemConvertible drop) {
-    return LootTable.builder()
-        .pool(LootPool.builder().conditionally(this.createWithShearsOrSilkTouchCondition()).rolls(ConstantLootNumberProvider.create(1F)).with(ItemEntry.builder(drop)));
-  }
-
   public LootTable.Builder noSaplingLeavesDrop(Block leaves) {
-    RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
-    return this.dropsWithSilkTouchOrShears2(leaves)
-        .pool(LootPool.builder().rolls(ConstantLootNumberProvider.create(1F)).conditionally(this.createWithoutShearsOrSilkTouchCondition()).with(
-            ((LeafEntry.Builder) this.applyExplosionDecay(leaves,
-                ItemEntry.builder(Items.STICK).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1F, 2F))))).conditionally(
-                TableBonusLootCondition.builder(impl.getOrThrow(Enchantments.FORTUNE), LEAVES_STICK_DROP_CHANCE))));
+    Item drop = Items.STICK;
+    return dropsWithSilkTouchOrShears(leaves, ((LeafEntry.Builder <?>)this.addSurvivesExplosionCondition(leaves, ItemEntry.builder(drop)))
+            .conditionally(TableBonusLootCondition.builder(Enchantments.FORTUNE,
+                    SAPLING_DROP_CHANCE
+            ))).pool(LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0F))
+            .conditionally(WITHOUT_SILK_TOUCH_NOR_SHEARS)
+            .with(((LeafEntry.Builder <?>)this.applyExplosionDecay(
+                    leaves, ItemEntry.builder(Items.STICK).apply(
+                            SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0F, 2.0F)))))
+                    .conditionally(TableBonusLootCondition.builder(Enchantments.FORTUNE, LEAVES_STICK_DROP_CHANCE))));
   }
 
   public LootTable.Builder flowerbedDropsWithShears(Block flowerbed) {
-    return LootTable.builder().pool(LootPool.builder().rolls(ConstantLootNumberProvider.create(1F)).with(this.applyExplosionDecay(flowerbed, ItemEntry.builder(flowerbed).apply(
-        IntStream.rangeClosed(1, 4).boxed().toList(), (flowerAmount) -> SetCountLootFunction.builder(ConstantLootNumberProvider.create((float) flowerAmount)).conditionally(
-                BlockStatePropertyLootCondition
-                    .builder(flowerbed).properties(net.minecraft.predicate.StatePredicate.Builder.create().exactMatch(AzollaBlock.FLOWER_AMOUNT, flowerAmount)))))).conditionally(this.createWithShearsOrSilkTouchCondition()));
+    return LootTable.builder().pool(LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0F)).with(this.applyExplosionDecay(flowerbed, ItemEntry.builder(flowerbed).apply(
+            IntStream.rangeClosed(1, 4).boxed().toList(), (flowerAmount) -> SetCountLootFunction.builder(ConstantLootNumberProvider.create((float)flowerAmount)).conditionally(BlockStatePropertyLootCondition
+                    .builder(flowerbed).properties(StatePredicate.Builder.create().exactMatch(FlowerbedBlock.FLOWER_AMOUNT, flowerAmount))).conditionally(WITH_SILK_TOUCH_OR_SHEARS)))));
   }
 
   private void addTreeTable(HashMap<String, Block[]> saplings, HashMap<String, Block> leaves) {
@@ -192,13 +186,12 @@ class NSBlockLootTableProvider extends FabricBlockLootTableProvider {
     addTreeTable(NSRegistryHelper.SaplingHashMap, NSRegistryHelper.LeavesHashMap);
     this.addDrop(NSWoods.OLIVE_BRANCH, BlockLootTableGenerator::dropsWithShears);
 
-    RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
     this.addDrop(CALCITE_CLUSTER, (block) -> dropsWithSilkTouch(block,
-        ItemEntry.builder(CALCITE_SHARD)
-            .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(4F)))
-            .apply(ApplyBonusLootFunction.oreDrops(impl.getOrThrow(Enchantments.FORTUNE)))
-            .conditionally(MatchToolLootCondition.builder(ItemPredicate.Builder.create().tag(ItemTags.CLUSTER_MAX_HARVESTABLES)))
-            .alternatively(this.applyExplosionDecay(block, ItemEntry.builder(CALCITE_SHARD).apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(2F)))))
+            ItemEntry.builder(CALCITE_SHARD)
+                    .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(4.0F)))
+                    .apply(ApplyBonusLootFunction.oreDrops(Enchantments.FORTUNE))
+                    .conditionally(MatchToolLootCondition.builder(net.minecraft.predicate.item.ItemPredicate.Builder.create().tag(ItemTags.CLUSTER_MAX_HARVESTABLES)))
+                    .alternatively(this.applyExplosionDecay(block, ItemEntry.builder(CALCITE_SHARD).apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(2.0F)))))
     ));
     this.addDropWithSilkTouch(SMALL_CALCITE_BUD);
     this.addDropWithSilkTouch(LARGE_CALCITE_BUD);
@@ -477,29 +470,30 @@ class NSBlockLootTableProvider extends FabricBlockLootTableProvider {
     this.addDrop(NSWoods.COCONUT_SPROUT);
     this.addDrop(NSWoods.COCONUT_BLOCK);
 
-    this.addDrop(FRIGID_GRASS, this::shortPlantDrops);
-    this.addDrop(SCORCHED_GRASS, this::shortPlantDrops);
-    this.addDrop(BEACH_GRASS, this::shortPlantDrops);
-    this.addDrop(SEDGE_GRASS, this::shortPlantDrops);
-    this.addDrop(FLAXEN_FERN, this::shortPlantDrops);
-    this.addDrop(OAT_GRASS, this::shortPlantDrops);
-    this.addDrop(LUSH_FERN, this::shortPlantDrops);
-    this.addDrop(MELIC_GRASS, this::shortPlantDrops);
-    this.addDrop(RED_BEARBERRIES, this::shortPlantDrops);
-    this.addDrop(RED_BITTER_SPROUTS, this::shortPlantDrops);
-    this.addDrop(GREEN_BEARBERRIES, this::shortPlantDrops);
-    this.addDrop(GREEN_BITTER_SPROUTS, this::shortPlantDrops);
-    this.addDrop(PURPLE_BEARBERRIES, this::shortPlantDrops);
-    this.addDrop(PURPLE_BITTER_SPROUTS, this::shortPlantDrops);
+    this.addDrop(FRIGID_GRASS, this::grassDrops);
+    this.addDrop(SCORCHED_GRASS, this::grassDrops);
+    this.addDrop(BEACH_GRASS, this::grassDrops);
+    this.addDrop(SEDGE_GRASS, this::grassDrops);
+    this.addDrop(FLAXEN_FERN, this::grassDrops);
+    this.addDrop(OAT_GRASS, this::grassDrops);
+    this.addDrop(LUSH_FERN, this::grassDrops);
+    this.addDrop(MELIC_GRASS, this::grassDrops);
+    this.addDrop(RED_BEARBERRIES, this::grassDrops);
+    this.addDrop(RED_BITTER_SPROUTS, this::grassDrops);
+    this.addDrop(GREEN_BEARBERRIES, this::grassDrops);
+    this.addDrop(GREEN_BITTER_SPROUTS, this::grassDrops);
+    this.addDrop(PURPLE_BEARBERRIES, this::grassDrops);
+    this.addDrop(PURPLE_BITTER_SPROUTS, this::grassDrops);
 
-    this.addDrop(TALL_FRIGID_GRASS, tallPlantDrops(TALL_FRIGID_GRASS, FRIGID_GRASS));
-    this.addDrop(TALL_SCORCHED_GRASS, tallPlantDrops(TALL_SCORCHED_GRASS, SCORCHED_GRASS));
-    this.addDrop(TALL_BEACH_GRASS, tallPlantDrops(TALL_BEACH_GRASS, BEACH_GRASS));
-    this.addDrop(TALL_SEDGE_GRASS, tallPlantDrops(TALL_SEDGE_GRASS, SEDGE_GRASS));
-    this.addDrop(LARGE_FLAXEN_FERN, tallPlantDrops(LARGE_FLAXEN_FERN, FLAXEN_FERN));
-    this.addDrop(TALL_OAT_GRASS, tallPlantDrops(TALL_OAT_GRASS, OAT_GRASS));
-    this.addDrop(LARGE_LUSH_FERN, tallPlantDrops(LARGE_LUSH_FERN, LUSH_FERN));
-    this.addDrop(TALL_MELIC_GRASS, tallPlantDrops(TALL_MELIC_GRASS, MELIC_GRASS));
+
+    this.addDrop(TALL_FRIGID_GRASS, tallGrassDrops(TALL_FRIGID_GRASS, FRIGID_GRASS));
+    this.addDrop(TALL_SCORCHED_GRASS, tallGrassDrops(TALL_SCORCHED_GRASS, SCORCHED_GRASS));
+    this.addDrop(TALL_BEACH_GRASS, tallGrassDrops(TALL_BEACH_GRASS, BEACH_GRASS));
+    this.addDrop(TALL_SEDGE_GRASS, tallGrassDrops(TALL_SEDGE_GRASS, SEDGE_GRASS));
+    this.addDrop(LARGE_FLAXEN_FERN, tallGrassDrops(LARGE_FLAXEN_FERN, FLAXEN_FERN));
+    this.addDrop(TALL_OAT_GRASS, tallGrassDrops(TALL_OAT_GRASS, OAT_GRASS));
+    this.addDrop(LARGE_LUSH_FERN, tallGrassDrops(LARGE_LUSH_FERN, LUSH_FERN));
+    this.addDrop(TALL_MELIC_GRASS, tallGrassDrops(TALL_MELIC_GRASS, MELIC_GRASS));
 
     addPottedPlantDrops(POTTED_PURPLE_BEARBERRIES);
     addPottedPlantDrops(POTTED_GREEN_BEARBERRIES);

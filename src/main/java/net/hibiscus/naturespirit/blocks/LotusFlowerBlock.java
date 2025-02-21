@@ -1,6 +1,5 @@
 package net.hibiscus.naturespirit.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.hibiscus.naturespirit.registration.NSMiscBlocks;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -27,11 +26,6 @@ public class LotusFlowerBlock extends PlantBlock implements Fertilizable {
 
   public LotusFlowerBlock(Settings properties) {
     super(properties);
-  }
-
-  @Override
-  protected MapCodec<? extends PlantBlock> getCodec() {
-    return null;
   }
 
   @Override
@@ -100,7 +94,7 @@ public class LotusFlowerBlock extends PlantBlock implements Fertilizable {
   }
 
   @Override
-  public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+  public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
     return new ItemStack(NSMiscBlocks.LOTUS_FLOWER_ITEM);
   }
 
@@ -118,7 +112,7 @@ public class LotusFlowerBlock extends PlantBlock implements Fertilizable {
   }
 
   @Override
-  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+  public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean bl) {
     return world.getBlockState(pos.up()).isAir() && !world.getBlockState(pos.down()).isOf(Blocks.WATER) && !isPowered(world, pos);
   }
 

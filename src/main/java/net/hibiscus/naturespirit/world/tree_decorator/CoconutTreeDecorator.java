@@ -15,9 +15,9 @@ import java.util.List;
 
 public class CoconutTreeDecorator extends TreeDecorator {
 
-  public static final MapCodec<CoconutTreeDecorator> CODEC = Codec.floatRange(0.0F, 1.0F).fieldOf("probability").xmap(CoconutTreeDecorator::new, (decorator) -> {
+  public static final Codec<CoconutTreeDecorator> CODEC = Codec.floatRange(0.0F, 1.0F).fieldOf("probability").xmap(CoconutTreeDecorator::new, (decorator) -> {
     return decorator.probability;
-  });
+  }).codec();
   private final float probability;
 
   public CoconutTreeDecorator(float probability) {

@@ -21,7 +21,7 @@ public class NSSounds {
   public static final RegistryEntry.Reference<SoundEvent> MUSIC_OVERWORLD_ALPINE = registerReference("music.overworld.alpine");
 
   private static RegistryEntry.Reference<SoundEvent> registerReference(String id) {
-    return registerReference(Identifier.of(MOD_ID, id));
+    return registerReference(new Identifier(MOD_ID, id));
   }
 
   private static RegistryEntry.Reference<SoundEvent> registerReference(Identifier id) {
