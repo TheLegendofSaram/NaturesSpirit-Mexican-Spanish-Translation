@@ -96,12 +96,19 @@ public class NatureSpirit implements ModInitializer {
 
 
       if (FabricLoader.getInstance().getModContainer("arts_and_crafts").isPresent()) {
+        if (FabricLoader.getInstance().getModContainer("mint").isPresent()) {
+          ResourceManagerHelper.registerBuiltinResourcePack(
+                  new Identifier(MOD_ID, "arts_and_crafts_mint_dat"), modContainer.get(),
+                  ResourcePackActivationType.ALWAYS_ENABLED
+          );
+        } else {
+          ResourceManagerHelper.registerBuiltinResourcePack(
+                  new Identifier(MOD_ID, "arts_and_crafts_dat"), modContainer.get(),
+                  ResourcePackActivationType.ALWAYS_ENABLED
+          );
+        }
         ResourceManagerHelper.registerBuiltinResourcePack(
                 new Identifier(MOD_ID, "arts_and_crafts_res"), modContainer.get(),
-                ResourcePackActivationType.ALWAYS_ENABLED
-        );
-        ResourceManagerHelper.registerBuiltinResourcePack(
-                new Identifier(MOD_ID, "arts_and_crafts_dat"), modContainer.get(),
                 ResourcePackActivationType.ALWAYS_ENABLED
         );
       }

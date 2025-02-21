@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "natures_spirit:paper_block"
+            "items": ["natures_spirit:paper_block"]
           }
         ]
       },
