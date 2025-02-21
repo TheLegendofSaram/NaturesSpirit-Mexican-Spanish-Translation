@@ -31,7 +31,7 @@ public class OliveBranchTreeDecorator extends TreeDecorator {
   public void generate(Generator generator) {
     Random random = generator.getRandom();
       List<BlockPos> list = generator.getLogPositions();
-      list.stream().filter((pos) -> pos.getY() > list.getFirst().getY() + 2).forEach((pos) -> {
+      list.stream().filter((pos) -> pos.getY() > list.get(0).getY() + 2).forEach((pos) -> {
 
         for (Direction direction : Direction.values()) {
           if (random.nextFloat() < this.probability) {
