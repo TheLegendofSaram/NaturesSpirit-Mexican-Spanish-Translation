@@ -5,7 +5,7 @@
   "advancements.adventure.kaolin_kill.title": "고령토의 맛 좀 봐라!",
   "advancements.adventure.sandy_forage.description": "사막 순무 뿌리 블록을 따라 사막 순무 블록을 찾으세요.",
   "advancements.adventure.sandy_forage.title": "모래 속에서의 채집",
-  "advancements.adventure.shoot_coconut.description": "발사체를 던져 야자나무 열매를 맞추세요.",
+  "advancements.adventure.shoot_coconut.description": "발사체를 던져 코코넛을 맞추세요",
   "advancements.adventure.shoot_coconut.title": "열대의 스나이퍼!",
   "architecture_extensions.grouped_block.natures_spirit.aspen": "사시나무",
   "architecture_extensions.grouped_block.natures_spirit.black_chalk": "검은색 백악",
@@ -19,7 +19,7 @@
   "architecture_extensions.grouped_block.natures_spirit.brown_kaolin_bricks": "갈색 고령토 벽돌",
   "architecture_extensions.grouped_block.natures_spirit.cedar": "개잎갈나무",
   "architecture_extensions.grouped_block.natures_spirit.cobbled_travertine": "석회화 조약돌",
-  "architecture_extensions.grouped_block.natures_spirit.coconut": "야자 열매",
+  "architecture_extensions.grouped_block.natures_spirit.coconut": "코코넛",
   "architecture_extensions.grouped_block.natures_spirit.cyan_chalk": "청록색 백악",
   "architecture_extensions.grouped_block.natures_spirit.cyan_kaolin": "청록색 고령토",
   "architecture_extensions.grouped_block.natures_spirit.cyan_kaolin_bricks": "청록색 고령토 벽돌",
@@ -246,7 +246,7 @@
   "block.natures_spirit.cobbled_travertine_slab": "석회화 조약돌 반 블록",
   "block.natures_spirit.cobbled_travertine_stairs": "석회화 조약돌 계단",
   "block.natures_spirit.cobbled_travertine_wall": "석회화 조약돌 담장",
-  "block.natures_spirit.coconut": "야자 열매",
+  "block.natures_spirit.coconut": "코코넛",
   "block.natures_spirit.coconut_button": "야자나무 버튼",
   "block.natures_spirit.coconut_door": "야자나무 문",
   "block.natures_spirit.coconut_fence": "야자나무 울타리",
@@ -915,5 +915,5 @@
   "tag.item.natures_spirit.pizza_toppings": "피자 토핑",
   "tag.item.natures_spirit.stripped_logs": "껍질 벗긴 원목",
   "tag.item.natures_spirit.succulents": "다육 식물",
-  "tag.item.natures_spirit.xeric_leaves": "내건성 잎"
+  "tag.item.natures_spirit.xeric_leaves": "말라버린 잎"
 }
